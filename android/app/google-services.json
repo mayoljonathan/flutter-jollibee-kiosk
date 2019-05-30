@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1086863951483",
+    "firebase_url": "https://jollibee-poc.firebaseio.com",
+    "project_id": "jollibee-poc",
+    "storage_bucket": "jollibee-poc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086863951483:android:c05bfc0ee926e97e",
+        "android_client_info": {
+          "package_name": "com.jollibee.kiosk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1086863951483-rg8ghhoic5fna7k8k7l2jngjbt1ci0ha.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVhTBchUJP7bRgoIxLOtMJgweCW7aKJm4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1086863951483-rg8ghhoic5fna7k8k7l2jngjbt1ci0ha.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
