@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:jollibee_kiosk/service_locator.dart';
+import 'package:jollibee_kiosk/locator.dart';
 
-import 'package:jollibee_kiosk/core/config/theme.dart';
-import 'package:jollibee_kiosk/core/viewmodels/menu.dart';
+import 'package:jollibee_kiosk/core/models/menu.dart';
+import 'package:jollibee_kiosk/core/services/menu_service.dart';
 
-import 'package:jollibee_kiosk/ui/views/entry_page.dart';
+import 'package:jollibee_kiosk/ui/router.dart';
+import 'package:jollibee_kiosk/ui/shared/theme.dart';
+import 'package:jollibee_kiosk/ui/views/entry_view.dart';
+
 
 // Future<void> main() async {
 //   final FirebaseApp firebaseApp = await FirebaseApp.configure(
@@ -40,11 +43,16 @@ class MyApp extends StatelessWidget {
     //   )
     // );
 
-    return MaterialApp(
-      title: 'Jollibee Kiosk',
-      debugShowCheckedModeBanner: false,
-      theme: kMaterialThemeData,
-      home: EntryPage(),
+    return StreamProvider<List<Menu>>(
+      initialData: [],
+      builder: (context) => locator<MenuService>().menuController,
+      child: MaterialApp(
+        title: 'Jollibee Kiosk',
+        debugShowCheckedModeBanner: false,
+        theme: kMaterialThemeData,
+        home: EntryView(),
+        onGenerateRoute: Router.generateRoute,
+      ),
     );
   }
 }

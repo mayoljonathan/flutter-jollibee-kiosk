@@ -1,21 +1,20 @@
-import 'package:jollibee_kiosk/service_locator.dart';
+import 'package:jollibee_kiosk/locator.dart';
 
-import 'package:jollibee_kiosk/core/models/menu.dart';
-import 'package:jollibee_kiosk/core/services/menu_service.dart';
 import 'package:jollibee_kiosk/core/viewmodels/base_model.dart';
+import 'package:jollibee_kiosk/core/services/menu_service.dart';
 
 class EntryModel extends BaseModel {
   final MenuService _menuService = locator<MenuService>();
 
-  Future<List<Category>> getMenu(context) async {
+  void getMenu(context) async {
     setState(ViewState.Busy);
-
-    List<Category> _categories = await _menuService.getMenu(context);
-    print('here cat');
-    print(_categories);
-    setState(ViewState.Idle);
-    return _categories;
+    try {
+      await _menuService.getMenu(context);
+      setState(ViewState.Idle);
+    } catch (e) {
+      print('[getMenu]: $e');
+      setState(ViewState.Idle);
+    }
   }
-
 
 }

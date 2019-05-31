@@ -65,7 +65,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: kCoreTextFieldBackgroundColor,
+      color: kTextFieldBackgroundColor,
       borderRadius: this._borderRadius,
       child: Container(
         decoration: BoxDecoration(

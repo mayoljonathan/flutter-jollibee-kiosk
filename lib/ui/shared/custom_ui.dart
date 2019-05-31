@@ -8,7 +8,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:jollibee_kiosk/core/config/theme.dart';
+import 'package:jollibee_kiosk/ui/shared/theme.dart';
 
 part 'custom_ui/custom_button.dart';
 part 'custom_ui/custom_bouncing_container.dart';
