@@ -29,20 +29,22 @@ class _MenuListState extends State<MenuList> {
   }
 
   void _onScroll() {
-    // print(_scrollController.offset);
     setState(() {});
   }
 
-  bool _hasReachedTop() {
+  bool _shouldArrowUpShow(bool arrowUp) {
     if (_scrollController.hasClients) {
-      return _scrollController.offset <= 0;
+      if (arrowUp) {
+        return _scrollController.offset <= 0;
+      } else {
+        return _scrollController.offset >= _scrollController.position.maxScrollExtent;
+      }
     }
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    print(_hasReachedTop());
     return Stack(
       children: <Widget>[
         Container(
@@ -62,43 +64,51 @@ class _MenuListState extends State<MenuList> {
           right: 0,
           child: Align(
             alignment: Alignment.center,
-            child: !_hasReachedTop() ? _buildArrow(true) : Container(height: 0, width: 0),
+            child: IgnorePointer(
+              ignoring: _shouldArrowUpShow(true),
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 200),
+                opacity: !_shouldArrowUpShow(true) ? 1 : 0,
+                child: _buildArrowUp(true),
+              ),
+            ),
           ),
         ),
-        // AnimatedContainer(
-        //   duration: Duration(milliseconds: 200),
-        //   height: _hasReachedTop() ? 0 : 10,
-        //   width: SizeConfig.blockSizeHorizontal * 20,
-        //   child: _buildArrow()
-        // ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Align(
+            alignment: Alignment.center,
+            child: IgnorePointer(
+              ignoring: _shouldArrowUpShow(false),
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 200),
+                opacity: !_shouldArrowUpShow(false) ? 1 : 0,
+                child: _buildArrowUp(false),
+              ),
+            ),
+          ),
+        ),
       ],
     );
-    // return Container(
-    //   width: SizeConfig.blockSizeHorizontal * 20,
-    //   color: Colors.white,
-    //   // decoration: BoxDecoration(
-    //   //   boxShadow: <BoxShadow>[
-    //   //     BoxShadow(
-    //   //       color: Colors.grey,
-    //   //       spreadRadius: 1, 
-    //   //       blurRadius: 12.0,
-    //   //       offset: Offset(-(SizeConfig.blockSizeHorizontal * 20)/20, 0)
-    //   //     )
-    //   //   ]
-    //   // ),
-    //   child: ListView.builder(
-    //     controller: _scrollController,
-    //     padding: const EdgeInsets.symmetric(vertical: 6.0),
-    //     physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-    //     itemCount: _menus.length,
-    //     itemBuilder: (_, int i) => MenuTile(menu: _menus[i]),
-    //   ),
-    // );
   }
 
-  Widget _buildArrow(bool arrowUp) {
-    IconData icon = arrowUp ? EvaIcons.arrowCircleUp : EvaIcons.arrowDown;
-    return Icon(icon, size: SizeConfig.blockSizeHorizontal * 4);
+  Widget _buildArrowUp(bool arrowUp) {
+    IconData icon = arrowUp ? EvaIcons.arrowCircleUp : EvaIcons.arrowCircleDown;
+    EdgeInsets padding = arrowUp ? EdgeInsets.only(top: 12.0) : EdgeInsets.only(bottom: 12.0);
+    return CustomBouncingContainer(
+      onTap: () {
+        double itemSize = _scrollController.position.maxScrollExtent / _menus.length;
+        double positionOffset = _scrollController.offset - (itemSize * 3); // Defaults to arrowUp
+        if (!arrowUp) positionOffset = _scrollController.offset + (itemSize * 3);
+        _scrollController.animateTo(positionOffset, duration: Duration(milliseconds: 200), curve: Curves.fastOutSlowIn);
+      },
+      child: Padding(
+        padding: padding,
+        child: Icon(icon, size: SizeConfig.blockSizeHorizontal * 5),
+      ),
+    );
   }
 }
 
@@ -130,7 +140,8 @@ class MenuTile extends StatelessWidget {
               Text(menu.name, 
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: SizeConfig.blockSizeHorizontal * 2.5
+                  fontSize: SizeConfig.blockSizeHorizontal * 2.5,
+                  fontWeight: FontWeight.w500
                 )
               ),
               // Text(Provider.of<MenuModel>(context).isSelectedMenu(menu.documentID).toString())

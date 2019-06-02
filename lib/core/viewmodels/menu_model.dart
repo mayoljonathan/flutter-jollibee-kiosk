@@ -14,5 +14,5 @@ class MenuModel extends BaseModel {
     _selectedMenu = Provider.of<List<Menu>>(context, listen: false).first;
   }
 
-  bool isSelectedMenu(String id) => _selectedMenu?.documentID == id;
+  bool isSelectedMenu(String id) => _selectedMenu?.id == id;
 }
