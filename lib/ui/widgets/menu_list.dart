@@ -35,9 +35,9 @@ class _MenuListState extends State<MenuList> {
   bool _shouldArrowUpShow(bool arrowUp) {
     if (_scrollController.hasClients) {
       if (arrowUp) {
-        return _scrollController.offset <= 0;
+        return _scrollController.offset <= 50;
       } else {
-        return _scrollController.offset >= _scrollController.position.maxScrollExtent;
+        return _scrollController.offset >= (_scrollController.position.maxScrollExtent - 25);
       }
     }
     return true;
@@ -140,7 +140,7 @@ class MenuTile extends StatelessWidget {
               Text(menu.name, 
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: SizeConfig.blockSizeHorizontal * 2.5,
+                  fontSize: SizeConfig.blockSizeHorizontal * 2.2,
                   fontWeight: FontWeight.w500
                 )
               ),

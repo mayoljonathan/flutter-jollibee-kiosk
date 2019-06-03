@@ -1,13 +1,88 @@
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
+import 'package:provider/provider.dart';
+
+import 'package:jollibee_kiosk/core/viewmodels/menu_model.dart';
+import 'package:jollibee_kiosk/core/models/menu.dart';
+
+import 'package:jollibee_kiosk/ui/shared/custom_ui.dart';
 import 'package:jollibee_kiosk/ui/shared/size_config.dart';
 
 class ItemGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(18.0),
-      child: Container(
-        color: Colors.yellow
+    return Provider(
+      builder: (_) => MenuModel(),
+      dispose: (_, val) => val.dispose(),
+      child: Builder(
+        builder: (_) {
+          List<Item> items = Provider.of<MenuModel>(context).selectedMenu.items;
+          if (items == null || items.length <= 0)
+            return _buildEmptyItemsState();
+
+          return GridView.builder(
+            physics: BouncingScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: SizeConfig.blockSizeHorizontal * 30,
+              mainAxisSpacing: 18.0
+            ),
+            padding: const EdgeInsets.all(18.0),
+            itemCount: items.length,
+            itemBuilder: (context, i) => ItemTile(item: items[i]),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildEmptyItemsState() {
+    return Center(child: Text('No items'));
+  }
+}
+
+class ItemTile extends StatelessWidget {
+  ItemTile({@required this.item});
+
+  final Item item;
+
+  @override
+  Widget build(BuildContext context) {
+
+    return CustomBouncingContainer(
+      upperBound: 0.25,
+      onTap: () {
+        // TODO
+        // Navigator.pushNamed(context, '/')
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            height: SizeConfig.blockSizeHorizontal * 15,
+            width: double.infinity,
+            child: FadeInImage.memoryNetwork(
+              key: ValueKey(item.id),
+              placeholder: kTransparentImage,
+              image: item.image,
+              fit: BoxFit.contain
+              // fit: BoxFit.contain,
+              // height: (SizeConfig.blockSizeHorizontal * 12),
+            ),
+          ),
+          SizedBox(height: 6.0),
+          Expanded(
+            child: Text(
+              item.name,
+              textAlign: TextAlign.center,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: SizeConfig.blockSizeHorizontal * 2.5,
+                fontWeight: FontWeight.w500
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -31,7 +31,7 @@ class _EntryViewState extends State<EntryView> {
     return BaseView<EntryModel>(
       onModelReady: (model) {
         _model = model;
-        _model.getMenu(context);
+        _model.getAllMenu(context);
       },
       builder: (context, model, child) {
         return Scaffold(body: _buildBody());
@@ -87,10 +87,8 @@ class _EntryViewState extends State<EntryView> {
 
   Widget _buildReadyState() {
     return CustomBouncingContainer(
-      onTap: () {
-        _model.getMenu(context);
-      },
-      // onTap: () => Navigator.pushNamed(context, '/home'),
+      // onTap: () => _model.getMenu(context), //DEBUG PURPOSES
+      onTap: () => Navigator.pushNamed(context, '/home'),
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: Colors.red,
@@ -124,7 +122,7 @@ class _EntryViewState extends State<EntryView> {
         ),
         SizedBox(height: 24),
         CustomBouncingContainer(
-          onTap: () => locator<EntryModel>().getMenu(context),
+          onTap: () => locator<EntryModel>().getAllMenu(context),
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: Colors.red,
