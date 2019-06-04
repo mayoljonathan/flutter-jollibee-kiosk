@@ -14,6 +14,8 @@ part 'custom_ui/custom_button.dart';
 part 'custom_ui/custom_bouncing_container.dart';
 part 'custom_ui/custom_textfield.dart';
 part 'custom_ui/custom_bottomsheet.dart';
+part 'custom_ui/custom_route.dart';
+part 'custom_ui/custom_fullscreen_dialog.dart';
 
 // part 'hero_dialog_route.dart';
 // part 'bottom_sheet_fix.dart';

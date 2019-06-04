@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:intl/intl.dart';
 
 part 'menu.g.dart';
 
@@ -41,5 +42,10 @@ class Item {
   });
 
   factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
+
+  String priceToString() {
+    final formatter = NumberFormat.simpleCurrency(name: '', decimalDigits: 2);
+    return '₱ ${formatter.format(price)}';
+  }
 
 }

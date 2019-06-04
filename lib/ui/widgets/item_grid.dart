@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jollibee_kiosk/ui/shared/theme.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +25,7 @@ class ItemGrid extends StatelessWidget {
             physics: BouncingScrollPhysics(),
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: SizeConfig.blockSizeHorizontal * 30,
-              mainAxisSpacing: 18.0
+              mainAxisSpacing: 18.0,
             ),
             padding: const EdgeInsets.all(18.0),
             itemCount: items.length,
@@ -47,12 +48,10 @@ class ItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return CustomBouncingContainer(
       upperBound: 0.25,
       onTap: () {
-        // TODO
-        // Navigator.pushNamed(context, '/')
+        Navigator.pushNamed(context, '/item-detail', arguments: item);
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -60,13 +59,41 @@ class ItemTile extends StatelessWidget {
           Container(
             height: SizeConfig.blockSizeHorizontal * 15,
             width: double.infinity,
-            child: FadeInImage.memoryNetwork(
-              key: ValueKey(item.id),
-              placeholder: kTransparentImage,
-              image: item.image,
-              fit: BoxFit.contain
-              // fit: BoxFit.contain,
-              // height: (SizeConfig.blockSizeHorizontal * 12),
+            child: Stack(
+              children: <Widget>[
+                Positioned.fill(
+                  child: Hero(
+                    tag: item.id,
+                    placeholderBuilder: (context, widget) => widget,
+                    child: FadeInImage.memoryNetwork(
+                      key: ValueKey(item.id),
+                      placeholder: kTransparentImage,
+                      image: item.image,
+                      fit: BoxFit.contain
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12.0),
+                      topRight: Radius.circular(12.0),
+                      bottomLeft: Radius.circular(3.0),
+                      bottomRight: Radius.circular(3.0),
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(6.0),
+                      color: kRed,
+                      child: Text(item.priceToString(), style: TextStyle(
+                        color: Colors.white,
+                        fontSize: SizeConfig.blockSizeHorizontal * 2,
+                        fontWeight: FontWeight.bold
+                      ))
+                    ),
+                  )
+                ),
+              ],
             ),
           ),
           SizedBox(height: 6.0),

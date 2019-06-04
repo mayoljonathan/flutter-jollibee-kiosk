@@ -87,7 +87,7 @@ class _EntryViewState extends State<EntryView> {
 
   Widget _buildReadyState() {
     return CustomBouncingContainer(
-      // onTap: () => _model.getMenu(context), //DEBUG PURPOSES
+      // onTap: () => _model.getAllMenu(context), //DEBUG PURPOSES
       onTap: () => Navigator.pushNamed(context, '/home'),
       child: DecoratedBox(
         decoration: BoxDecoration(

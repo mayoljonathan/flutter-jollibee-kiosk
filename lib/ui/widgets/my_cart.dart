@@ -37,7 +37,7 @@ class MyCart extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Your Order', style: TextStyle(
+          Text('My Order', style: TextStyle(
             fontSize: kSubheadTextSize
           ))
         ],

@@ -7,9 +7,13 @@ const kScaffoldBackgroundColor = Color(0xFFFAF9FA);
 
 const kYellow = Color(0xFFFFB617);
 const kRed = Color(0xFFE5163E);
+const kGreen = Colors.green;
 
 double kTitleTextSize = SizeConfig.blockSizeHorizontal * 5;
 double kSubheadTextSize = SizeConfig.blockSizeHorizontal * 4;
+double kActionButtonTextSize = SizeConfig.blockSizeHorizontal * 3;
+double kBodyTextSize = SizeConfig.blockSizeHorizontal * 2.5;
+
 
 final kFontFamily = 'GoogleSans';
 final kPrimaryTextColor = Color(0xFF3A444D);
