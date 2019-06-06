@@ -87,7 +87,7 @@ class ItemTile extends StatelessWidget {
                       color: kRed,
                       child: Text(item.priceToString(), style: TextStyle(
                         color: Colors.white,
-                        fontSize: SizeConfig.blockSizeHorizontal * 2,
+                        fontSize: kCaptionTextSize,
                         fontWeight: FontWeight.bold
                       ))
                     ),

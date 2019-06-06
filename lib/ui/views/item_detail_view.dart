@@ -36,9 +36,12 @@ class ItemDetailView extends StatelessWidget {
                   Expanded(child: _buildItemName()),
                 ],
               ),
+              SizedBox(height: 48.0),
               ItemOptions(
                 hasAddOns: item.hasAddOns ?? false,
                 hasDrinks: item.hasDrinks ?? false,
+                maxDrinkSelection: item.maxDrinkSelection ?? 1,
+                maxAddOnSelection: item.maxAddOnSelection ?? 1,
               ),
               SizedBox(height: 12.0),
               _buildFooter(context)

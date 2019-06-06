@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import 'base_item.dart';
+
 part 'option_category.g.dart';
 
 @JsonSerializable(nullable: true)
@@ -21,7 +23,7 @@ class OptionCategory {
 
 // Usable both add_on and drink
 @JsonSerializable(nullable: true)
-class OptionItem {
+class OptionItem extends BaseItem {
   final String id;
   final String name;
   final String image;
@@ -31,7 +33,7 @@ class OptionItem {
     this.id, 
     this.name, 
     this.image,
-    this.price 
+    this.price,
   });
 
   factory OptionItem.fromJson(Map<String, dynamic> json) => _$OptionItemFromJson(json);

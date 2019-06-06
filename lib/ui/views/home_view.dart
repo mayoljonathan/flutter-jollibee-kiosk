@@ -44,7 +44,7 @@ class _HomeViewState extends State<HomeView> {
         print('home view build');
         return SafeArea(
           child: Scaffold(
-            backgroundColor: kScaffoldBackgroundColor,
+            backgroundColor: kCanvasColor,
             body: _buildBody(),
             bottomNavigationBar: MyCart(),
           ),

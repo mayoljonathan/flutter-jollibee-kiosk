@@ -31,7 +31,9 @@ Item _$ItemFromJson(Map<String, dynamic> json) {
       image: json['image'] as String,
       price: (json['price'] as num)?.toDouble(),
       hasDrinks: json['hasDrinks'] as bool,
-      hasAddOns: json['hasAddOns'] as bool);
+      hasAddOns: json['hasAddOns'] as bool,
+      maxDrinkSelection: json['maxDrinkSelection'] as int,
+      maxAddOnSelection: json['maxAddOnSelection'] as int);
 }
 
 Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
@@ -40,5 +42,7 @@ Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
       'image': instance.image,
       'price': instance.price,
       'hasDrinks': instance.hasDrinks,
-      'hasAddOns': instance.hasAddOns
+      'hasAddOns': instance.hasAddOns,
+      'maxDrinkSelection': instance.maxDrinkSelection,
+      'maxAddOnSelection': instance.maxAddOnSelection
     };

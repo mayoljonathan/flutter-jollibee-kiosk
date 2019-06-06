@@ -19,7 +19,6 @@ class _MenuListState extends State<MenuList> {
 
   ScrollController _scrollController;
 
-
   @override
   void initState() {
     super.initState();

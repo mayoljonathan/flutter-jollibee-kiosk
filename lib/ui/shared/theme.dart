@@ -3,7 +3,7 @@ import 'package:jollibee_kiosk/ui/shared/size_config.dart';
 
 // const kBackgroundColor = Color(0xFFCD1338);
 
-const kScaffoldBackgroundColor = Color(0xFFFAF9FA);
+const kCanvasColor = Color(0xFFFAF9FA);
 
 const kYellow = Color(0xFFFFB617);
 const kRed = Color(0xFFE5163E);
@@ -13,6 +13,8 @@ double kTitleTextSize = SizeConfig.blockSizeHorizontal * 5;
 double kSubheadTextSize = SizeConfig.blockSizeHorizontal * 4;
 double kActionButtonTextSize = SizeConfig.blockSizeHorizontal * 3;
 double kBodyTextSize = SizeConfig.blockSizeHorizontal * 2.5;
+double kCaptionTextSize = SizeConfig.blockSizeHorizontal * 2;
+double kOverlineTextSize = SizeConfig.blockSizeHorizontal * 1.8;
 
 
 final kFontFamily = 'GoogleSans';
@@ -36,6 +38,7 @@ ThemeData kMaterialThemeData = ThemeData(
   fontFamily: kFontFamily,
   primaryColor: kPrimaryColor,
   cursorColor: kPrimaryColor,
+  canvasColor: kCanvasColor,
   textTheme: TextTheme(
     display1: TextStyle(
       color: kPrimaryColor,

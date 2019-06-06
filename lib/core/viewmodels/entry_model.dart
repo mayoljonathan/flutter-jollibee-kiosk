@@ -19,7 +19,7 @@ class EntryModel extends BaseModel {
       ]);
 
       print('Starting precaching images');
-      await _precacheImages(context);
+      // await _precacheImages(context);
       print('Done precaching images');
       setState(ViewState.Idle);
     } catch (e) {
