@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:jollibee_kiosk/core/viewmodels/item_detail_model.dart';
 import 'package:jollibee_kiosk/ui/views/base_view.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:after_layout/after_layout.dart';
 
@@ -39,25 +40,11 @@ class OptionItemTileListState extends State<OptionItemTileList> with AfterLayout
   final double _optionItemTileHeight = 200;
   ScrollController _scrollController;
   
-  /// {
-  ///    [ItemOption.Drink] = [
-  ///       OptionItem.id: 1,
-  ///       OptionItem.id: 2,
-  ///    ],
-  ///    [ItemOption.AddOn] = []
-  /// }
-  // Map<ItemOption, List<OptionItemCart>> _optionSelections;
-
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
-
-    // _optionSelections = {
-    //   ItemOption.Drink: [],
-    //   ItemOption.AddOn: [],
-    // };
   }
 
   @override
@@ -83,10 +70,7 @@ class OptionItemTileListState extends State<OptionItemTileList> with AfterLayout
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<ItemDetailModel>(
-      onModelReady: (model) {
-        
-      },
+    return Consumer<ItemDetailModel>(
       builder: (context, model, child) {
         return ClipRRect(
           borderRadius: BorderRadius.circular(12.0),
@@ -103,8 +87,8 @@ class OptionItemTileListState extends State<OptionItemTileList> with AfterLayout
                     itemBuilder: (BuildContext context, int i) => OptionItemTile(
                       key: ValueKey(widget.optionCategory.items[i].id),
                       optionItem: widget.optionCategory.items[i],
-                      onTap: () => model.onOptionItemTileTap(widget.itemOption, widget.optionCategory.items[i]),
-                      selectedCount: model.getOptionItemSelectedCount(widget.optionCategory.items[i]),
+                      onTap: () => model.onOptionItemTileTap(context, widget.itemOption, widget.optionCategory.items[i]),
+                      selectedCount: model.getOptionItemSelectedCount(widget.itemOption, widget.optionCategory.items[i]),
                     ),
                     separatorBuilder: (BuildContext context, int i) => SizedBox(width: 6.0),
                   ),
@@ -142,7 +126,7 @@ class OptionItemTileListState extends State<OptionItemTileList> with AfterLayout
               ),
           ),
         );  
-      }
+      },
     );
   }
 
@@ -163,41 +147,6 @@ class OptionItemTileListState extends State<OptionItemTileList> with AfterLayout
     );
   }
 
-  // int _getOptionItemSelectedCount(OptionItem optionItem) {
-  //   OptionItemCart oic = _optionSelections[ItemOption.Drink].firstWhere((OptionItemCart oic) => oic.id == optionItem.id, 
-  //     orElse: () => null
-  //   );
-  //   return oic == null ? 0 : oic.quantity;
-  // }
-
-  // void _onOptionItemTileTap(OptionItem optionItem) {
-  //   if (!_hasSelectedOptionItem(optionItem)) _addToOptionSelections(widget.itemOption, optionItem);
-  //   setState(() {});
-  // }
-
-  // void _addToOptionSelections(ItemOption itemOption, OptionItem optionItem) {
-  //   _optionSelections[itemOption].add(OptionItemCart(
-  //     id: optionItem.id,
-  //     price: optionItem.price,
-  //     quantity: 1
-  //   ));
-  // }
-
-  // bool _hasSelectedOptionItem(OptionItem optionItem) {
-  //   if (_optionSelections[ItemOption.Drink].length > 0) {
-  //     OptionItemCart oic = _optionSelections[ItemOption.Drink].firstWhere((OptionItemCart oic) => oic.id == optionItem.id, 
-  //       orElse: () => null
-  //     );
-  //     return oic == null ? false : true;
-  //   } else if (_optionSelections[ItemOption.AddOn].length > 0) {
-  //     OptionItemCart oic = _optionSelections[ItemOption.AddOn].firstWhere((OptionItemCart oic) => oic.id == optionItem.id, 
-  //       orElse: () => null
-  //     );
-  //     return oic == null ? false : true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
 }
 
 class OptionItemTile extends StatelessWidget {
@@ -231,11 +180,15 @@ class OptionItemTile extends StatelessWidget {
                 child: Stack(
                   children: <Widget>[
                     Positioned.fill(
-                      child: FadeInImage.memoryNetwork(
-                        key: ValueKey(optionItem.id),
-                        placeholder: kTransparentImage,
-                        image: optionItem.image,
-                        fit: BoxFit.contain
+                      child: Hero(
+                        tag: 'optionItem-${optionItem.id}',
+                        placeholderBuilder: (context, widget) => widget,
+                        child: FadeInImage.memoryNetwork(
+                          key: ValueKey(optionItem.id),
+                          placeholder: kTransparentImage,
+                          image: optionItem.image,
+                          fit: BoxFit.contain
+                        ),
                       ),
                     ),
                     optionItem.price != null ? Align(
@@ -294,9 +247,9 @@ class OptionItemTile extends StatelessWidget {
 }
 
 class OptionItemCart {
-  final String id;
-  final int quantity;
-  final double price;
+  String id;
+  int quantity;
+  double price;
 
   OptionItemCart({this.id, this.quantity, this.price});
 }

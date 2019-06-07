@@ -13,7 +13,7 @@ Menu _$MenuFromJson(Map<String, dynamic> json) {
       image: json['image'] as String,
       items: (json['items'] as List)
           ?.map((e) =>
-              e == null ? null : Item.fromJson(e as Map<String, dynamic>))
+              e == null ? null : MenuItem.fromJson(e as Map<String, dynamic>))
           ?.toList());
 }
 
@@ -24,8 +24,8 @@ Map<String, dynamic> _$MenuToJson(Menu instance) => <String, dynamic>{
       'items': instance.items
     };
 
-Item _$ItemFromJson(Map<String, dynamic> json) {
-  return Item(
+MenuItem _$MenuItemFromJson(Map<String, dynamic> json) {
+  return MenuItem(
       id: json['id'] as String,
       name: json['name'] as String,
       image: json['image'] as String,
@@ -36,7 +36,7 @@ Item _$ItemFromJson(Map<String, dynamic> json) {
       maxAddOnSelection: json['maxAddOnSelection'] as int);
 }
 
-Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
+Map<String, dynamic> _$MenuItemToJson(MenuItem instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'image': instance.image,

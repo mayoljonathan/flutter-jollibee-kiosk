@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jollibee_kiosk/core/viewmodels/item_detail_model.dart';
 import 'package:jollibee_kiosk/ui/shared/theme.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:provider/provider.dart';
@@ -12,12 +13,14 @@ import 'package:jollibee_kiosk/ui/shared/size_config.dart';
 class ItemGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      builder: (_) => MenuModel(),
-      dispose: (_, val) => val.dispose(),
+    return MultiProvider(
+      providers: [
+        Provider<MenuModel>.value(value: MenuModel()),
+        Provider<ItemDetailModel>.value(value: ItemDetailModel()),
+      ],
       child: Builder(
         builder: (_) {
-          List<Item> items = Provider.of<MenuModel>(context).selectedMenu.items;
+          List<MenuItem> items = Provider.of<MenuModel>(context).selectedMenu.items;
           if (items == null || items.length <= 0)
             return _buildEmptyItemsState();
 
@@ -44,13 +47,15 @@ class ItemGrid extends StatelessWidget {
 class ItemTile extends StatelessWidget {
   ItemTile({@required this.item});
 
-  final Item item;
+  final MenuItem item;
 
   @override
   Widget build(BuildContext context) {
     return CustomBouncingContainer(
       upperBound: 0.25,
       onTap: () {
+        Provider.of<ItemDetailModel>(context, listen: false).selectedMenuItem = item;
+        print(Provider.of<ItemDetailModel>(context, listen: false).selectedMenuItem);
         Navigator.pushNamed(context, '/item-detail', arguments: item);
       },
       child: Column(

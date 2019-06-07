@@ -123,9 +123,7 @@ class MenuTile extends StatelessWidget {
       dispose: (_, val) => val.dispose(),
       child: CustomBouncingContainer(
         upperBound: 0.25,
-        onTap: () {
-          Provider.of<MenuModel>(context).selectedMenu = menu;
-        },
+        onTap: () => Provider.of<MenuModel>(context).selectedMenu = menu,
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(

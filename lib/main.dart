@@ -10,7 +10,6 @@ import 'package:jollibee_kiosk/ui/router.dart';
 import 'package:jollibee_kiosk/ui/shared/theme.dart';
 import 'package:jollibee_kiosk/ui/views/entry_view.dart';
 
-
 // Future<void> main() async {
 //   final FirebaseApp firebaseApp = await FirebaseApp.configure(
 //     name: 'Jollibee POC',

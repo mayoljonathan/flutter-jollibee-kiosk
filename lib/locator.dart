@@ -10,10 +10,11 @@ import 'package:jollibee_kiosk/core/viewmodels/menu_model.dart';
 GetIt locator = GetIt();
 
 void setupLocator() {
-  locator.registerLazySingleton(() => MenuService());
+  locator.registerLazySingleton<MenuService>(() => MenuService());
 
-  locator.registerLazySingleton(() => EntryModel());
-  locator.registerFactory(() => MenuModel());
-  locator.registerFactory(() => HomeModel());
-  locator.registerFactory(() => ItemDetailModel());
+  locator.registerLazySingleton<EntryModel>(() => EntryModel());
+  locator.registerFactory<MenuModel>(() => MenuModel());
+  locator.registerFactory<HomeModel>(() => HomeModel());
+  // locator.registerFactory<ItemDetailModel>(() => ItemDetailModel());
+  locator.registerLazySingleton<ItemDetailModel>(() => ItemDetailModel());
 }

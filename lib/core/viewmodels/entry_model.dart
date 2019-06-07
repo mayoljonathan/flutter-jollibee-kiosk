@@ -33,7 +33,7 @@ class EntryModel extends BaseModel {
       Future.wait(_menuService.menu.map((Menu menu) async {
         await precacheImage(NetworkImage(menu.image), context);
         // await Future.wait(menu?.items?.map((Item item) async => await precacheImage(NetworkImage(item?.image), context)));
-        menu?.items?.forEach((Item item) async => await precacheImage(NetworkImage(item.image), context));
+        menu?.items?.forEach((MenuItem item) async => await precacheImage(NetworkImage(item.image), context));
       })),
       Future.wait(_menuService.drinks.map((OptionCategory optionCategory) async {
         optionCategory?.items?.forEach((OptionItem item) async => await precacheImage(NetworkImage(item?.image), context));

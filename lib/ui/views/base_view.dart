@@ -19,10 +19,16 @@ class _BaseViewState<T extends ChangeNotifier> extends State<BaseView<T>> {
 
   @override
   void initState() {
+    super.initState();
     if (widget.onModelReady != null) {
       widget.onModelReady(model);
     }
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print('Disposing $model');
   }
 
   @override

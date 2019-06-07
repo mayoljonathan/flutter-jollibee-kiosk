@@ -10,7 +10,7 @@ class Menu {
   String id;
   String name;
   String image;
-  List<Item> items;
+  List<MenuItem> items;
 
   Menu({this.id, this.name, this.image, this.items});
 
@@ -24,7 +24,7 @@ class Menu {
 }
 
 @JsonSerializable(nullable: true)
-class Item extends BaseItem {
+class MenuItem extends BaseItem {
   final String id;
   final String name;
   final String image;
@@ -34,7 +34,7 @@ class Item extends BaseItem {
   final int maxDrinkSelection;
   final int maxAddOnSelection;
 
-  Item({
+  MenuItem({
     this.id, 
     this.name, 
     this.image, 
@@ -45,6 +45,6 @@ class Item extends BaseItem {
     this.maxAddOnSelection,
   });
 
-  factory Item.fromJson(Map<String, dynamic> json) => _$ItemFromJson(json);
+  factory MenuItem.fromJson(Map<String, dynamic> json) => _$MenuItemFromJson(json);
 
 }

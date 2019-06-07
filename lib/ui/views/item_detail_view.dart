@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jollibee_kiosk/core/viewmodels/item_detail_model.dart';
+import 'package:jollibee_kiosk/ui/views/base_view.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import 'package:jollibee_kiosk/core/models/menu.dart';
@@ -9,46 +12,52 @@ import 'package:jollibee_kiosk/ui/widgets/item_options.dart';
 import 'package:jollibee_kiosk/ui/widgets/quantity_picker.dart';
 
 class ItemDetailView extends StatelessWidget {
-  ItemDetailView({
-    @required this.item
-  });
-
-  final Item item;
+  ItemDetailView({@required this.item});
+  final MenuItem item;
 
   @override
   Widget build(BuildContext context) {
-    return FullscreenDialog(
-      child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Container(
-          width: SizeConfig.screenWidth,
-          padding: const EdgeInsets.all(36.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              _buildHeader(),
-              SizedBox(height: 12.0),
-              Row(
-                children: <Widget>[
-                  _buildItemImage(),
-                  SizedBox(width: 24.0),
-                  Expanded(child: _buildItemName()),
-                ],
+    return ChangeNotifierProvider<ItemDetailModel>(
+      builder: (BuildContext context) => ItemDetailModel(),
+      child: Consumer<ItemDetailModel>(
+        builder: (context, model, child) {
+          model.selectedMenuItem = item;
+
+          return FullscreenDialog(
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Container(
+                width: SizeConfig.screenWidth,
+                padding: const EdgeInsets.all(36.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    _buildHeader(),
+                    SizedBox(height: 12.0),
+                    Row(
+                      children: <Widget>[
+                        _buildItemImage(),
+                        SizedBox(width: 24.0),
+                        Expanded(child: _buildItemName()),
+                      ],
+                    ),
+                    SizedBox(height: 48.0),
+                    ItemOptions(
+                      hasAddOns: item.hasAddOns ?? false,
+                      hasDrinks: item.hasDrinks ?? false,
+                      maxDrinkSelection: item.maxDrinkSelection ?? 1,
+                      maxAddOnSelection: item.maxAddOnSelection ?? 1,
+                    ),
+                    SizedBox(height: 12.0),
+                    _buildFooter(context)
+                  ],
+                )
               ),
-              SizedBox(height: 48.0),
-              ItemOptions(
-                hasAddOns: item.hasAddOns ?? false,
-                hasDrinks: item.hasDrinks ?? false,
-                maxDrinkSelection: item.maxDrinkSelection ?? 1,
-                maxAddOnSelection: item.maxAddOnSelection ?? 1,
-              ),
-              SizedBox(height: 12.0),
-              _buildFooter(context)
-            ],
-          )
-        ),
-      ),
+            ),
+          );
+        },
+      )
     );
   }
 
@@ -73,12 +82,9 @@ class ItemDetailView extends StatelessWidget {
   }
 
   Widget _buildItemName() {
-    return Hero(
-      tag: 'item-name-${item.id}',
-      child: Text(item.name, style: TextStyle(
-        fontSize: kSubheadTextSize,
-      )),
-    );
+    return Text(item.name, style: TextStyle(
+      fontSize: kSubheadTextSize,
+    ));
   }
 
   Widget _buildFooter(context) {
@@ -136,21 +142,6 @@ class ItemDetailView extends StatelessWidget {
         ),
       ],
     );
-    // return Text(item.priceToString(), style: TextStyle(
-    //   fontSize: SizeConfig.blockSizeHorizontal * 3
-    // ));
-    // return Column(
-    //   mainAxisSize: MainAxisSize.max,
-    //   children: <Widget>[
-    //     Text('Meal Total', style: TextStyle(
-    //       fontSize: kBodyTextSize
-    //     )),
-    //     SizedBox(height: 12.0),
-    //     Text(item.priceToString(), style: TextStyle(
-    //       fontSize: SizeConfig.blockSizeHorizontal * 3
-    //     )),
-    //   ],
-    // );
   }
 
   Widget _buildActionButtons(context) {
@@ -158,7 +149,18 @@ class ItemDetailView extends StatelessWidget {
       children: <Widget>[
         Expanded(child: _buildActionButtonItem(context, text: 'Cancel')),
         SizedBox(width: 18.0),
-        Expanded(child: _buildActionButtonItem(context, text: 'Add to My Order', color: kGreen)),
+        Expanded(child: 
+          Consumer<ItemDetailModel>(
+            builder: (context, model, child) => _buildActionButtonItem(context, 
+              text: 'Add to My Order', 
+              color: kGreen,
+              onTap: () {
+                print(model.selectedMenuItem);
+                // model.onAddMenuItemToOrder(item);
+              }
+            )
+          )
+        ),
       ],
     );
   }
