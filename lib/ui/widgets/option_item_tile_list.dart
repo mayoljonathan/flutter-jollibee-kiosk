@@ -1,13 +1,12 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:jollibee_kiosk/core/viewmodels/item_detail_model.dart';
-import 'package:jollibee_kiosk/ui/views/base_view.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:after_layout/after_layout.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
+import 'package:jollibee_kiosk/core/models/base_item.dart';
+import 'package:jollibee_kiosk/core/viewmodels/item_detail_model.dart';
 import 'package:jollibee_kiosk/core/models/option_category.dart';
 import 'package:jollibee_kiosk/ui/shared/custom_ui.dart';
 import 'package:jollibee_kiosk/ui/shared/size_config.dart';
@@ -169,72 +168,101 @@ class OptionItemTile extends StatelessWidget {
       child: CustomBouncingContainer(
         upperBound: 0.25,
         onTap: onTap,
-        child: Container(
-          decoration: getOptionItemTileDecoration(),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                height: SizeConfig.blockSizeHorizontal * 15,
-                width: double.infinity,
-                child: Stack(
-                  children: <Widget>[
-                    Positioned.fill(
-                      child: Hero(
-                        tag: 'optionItem-${optionItem.id}',
-                        placeholderBuilder: (context, widget) => widget,
-                        child: FadeInImage.memoryNetwork(
-                          key: ValueKey(optionItem.id),
-                          placeholder: kTransparentImage,
-                          image: optionItem.image,
-                          fit: BoxFit.contain
+        child: Stack(
+          children: <Widget>[
+            Container(
+              decoration: getOptionItemTileDecoration(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    height: SizeConfig.blockSizeHorizontal * 15,
+                    width: double.infinity,
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned.fill(
+                          child: Hero(
+                            tag: 'optionItem-${optionItem.id}',
+                            placeholderBuilder: (context, widget) => widget,
+                            child: FadeInImage.memoryNetwork(
+                              key: ValueKey(optionItem.id),
+                              placeholder: kTransparentImage,
+                              image: optionItem.image,
+                              fit: BoxFit.contain
+                            ),
+                          ),
                         ),
-                      ),
+                        optionItem.price != null ? Align(
+                          alignment: Alignment(0.87,1),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(12.0),
+                              topRight: Radius.circular(12.0),
+                              bottomLeft: Radius.circular(3.0),
+                              bottomRight: Radius.circular(3.0),
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.all(6.0),
+                              color: kRed,
+                              child: Text('add ${optionItem.priceToString()}' , style: TextStyle(
+                                color: Colors.white,
+                                fontSize: kOverlineTextSize,
+                                fontWeight: FontWeight.bold
+                              ))
+                            ),
+                          )
+                        ) : Container()
+                      ],
                     ),
-                    optionItem.price != null ? Align(
-                      alignment: Alignment.bottomRight,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(12.0),
-                          topRight: Radius.circular(12.0),
-                          bottomLeft: Radius.circular(3.0),
-                          bottomRight: Radius.circular(3.0),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.all(6.0),
-                          color: kRed,
-                          child: Text('add ${optionItem.priceToString()}' , style: TextStyle(
-                            color: Colors.white,
-                            fontSize: kOverlineTextSize,
-                            fontWeight: FontWeight.bold
-                          ))
-                        ),
-                      )
-                    ) : Container()
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 6.0),
+                  Text(
+                    optionItem.name,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: kCaptionTextSize,
+                      fontWeight: FontWeight.w500
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 6.0),
-              Text(
-                optionItem.name,
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: kCaptionTextSize,
-                  fontWeight: FontWeight.w500
+            ),
+            selectedCount >= 1 ? Positioned(
+              top: 6,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 3.0),
+                decoration: BoxDecoration(
+                  color: kRed,
+                  shape: BoxShape.circle
                 ),
-              ),
-              Text(selectedCount.toString())
-            ],
-          ),
+                child: RichText(
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(text: 'x', style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      )),
+                      TextSpan(text: selectedCount.toString(), style: TextStyle(
+                        fontSize: kBodyTextSize,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white
+                      ))
+                    ]
+                  ),
+                )
+              )
+            ) : SizedBox(height: 0, width: 0)
+          ],
         ),
       )
     );
   }
 
   BoxDecoration getOptionItemTileDecoration() {
-    if (selectedCount <= 0) return null;
+    if (selectedCount <= 0) return BoxDecoration(color: Colors.transparent);
 
     return BoxDecoration(
       border: Border.all(
@@ -244,12 +272,4 @@ class OptionItemTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(12.0)
     );
   }
-}
-
-class OptionItemCart {
-  String id;
-  int quantity;
-  double price;
-
-  OptionItemCart({this.id, this.quantity, this.price});
 }

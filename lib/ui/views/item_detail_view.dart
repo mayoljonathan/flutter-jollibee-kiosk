@@ -34,23 +34,24 @@ class ItemDetailView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     _buildHeader(),
-                    SizedBox(height: 12.0),
-                    Row(
-                      children: <Widget>[
-                        _buildItemImage(),
-                        SizedBox(width: 24.0),
-                        Expanded(child: _buildItemName()),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: Row(
+                        children: <Widget>[
+                          _buildItemImage(),
+                          SizedBox(width: 24.0),
+                          Expanded(child: _buildItemName()),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: 48.0),
                     ItemOptions(
                       hasAddOns: item.hasAddOns ?? false,
                       hasDrinks: item.hasDrinks ?? false,
                       maxDrinkSelection: item.maxDrinkSelection ?? 1,
                       maxAddOnSelection: item.maxAddOnSelection ?? 1,
                     ),
-                    SizedBox(height: 12.0),
-                    _buildFooter(context)
+                    Divider(height: 48.0),
+                    _buildFooter(context, model)
                   ],
                 )
               ),
@@ -62,7 +63,7 @@ class ItemDetailView extends StatelessWidget {
   }
 
   Widget _buildHeader() {
-    return Text('Make your choice', style: TextStyle(
+    return Text('Choose your options', style: TextStyle(
       fontSize: kTitleTextSize,
       fontWeight: FontWeight.bold
     ));
@@ -87,7 +88,7 @@ class ItemDetailView extends StatelessWidget {
     ));
   }
 
-  Widget _buildFooter(context) {
+  Widget _buildFooter(context, ItemDetailModel model) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -95,15 +96,12 @@ class ItemDetailView extends StatelessWidget {
           children: <Widget>[
             Column(
               children: <Widget>[
-                Text('Quantity', style: TextStyle(
+                Text('Meal Quantity', style: TextStyle(
                   fontSize: kBodyTextSize
                 )),
                 SizedBox(height: 12.0),
                 QuantityPicker(
-                  onChanged: (int qty) {
-                    // TODO
-                    print(qty);
-                  },
+                  onChanged: (int qty) => model.quantity = qty
                 ),
               ],
             ),
@@ -111,7 +109,7 @@ class ItemDetailView extends StatelessWidget {
               top: 0,
               right: 0,
               bottom: 0,
-              child: _buildMealTotal()
+              child: _buildMealTotal(model)
             ),
           ],
         ),
@@ -121,26 +119,34 @@ class ItemDetailView extends StatelessWidget {
     );
   }
 
-  Widget _buildMealTotal() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        Text('Meal Total', style: TextStyle(
-          fontSize: kBodyTextSize,
-        )),
-        SizedBox(height: 12.0),
-        SizedBox(
-          height: (SizeConfig.blockSizeHorizontal * 5) + 12,
-          child: Align(
-            alignment: Alignment.center,
-            child: Text(item.priceToString(), style: TextStyle(
-              fontSize: SizeConfig.blockSizeHorizontal * 3,
-              fontWeight: FontWeight.bold
-            )),
-          ),
+  Widget _buildMealTotal(ItemDetailModel model) {
+    return Container(
+      padding: const EdgeInsets.all(12.0),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: kRed,
+          width: 2
         ),
-      ],
+        borderRadius: BorderRadius.circular(9.0)
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Text('Meal Total', style: TextStyle(
+            fontSize: kBodyTextSize,
+          )),
+          Expanded(
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(model.getMealTotalToString(), style: TextStyle(
+                fontSize: kActionButtonTextSize,
+                fontWeight: FontWeight.bold
+              )),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -155,8 +161,7 @@ class ItemDetailView extends StatelessWidget {
               text: 'Add to My Order', 
               color: kGreen,
               onTap: () {
-                print(model.selectedMenuItem);
-                // model.onAddMenuItemToOrder(item);
+                model.onAddMenuItemToOrder(context, item: item);
               }
             )
           )

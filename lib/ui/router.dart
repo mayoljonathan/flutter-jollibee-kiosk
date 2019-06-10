@@ -23,11 +23,13 @@ class Router {
       case '/option-item-quantity-picker':
         final args = settings.arguments as Map<String, dynamic>;
         final optionItem = args['optionItem'] as OptionItem;
+        final initialQuantity = args['initialQuantity'] as int;
         final maxQuantity = args['maxQuantity'] as int;
 
         return HeroDialogRoute(
           builder: (BuildContext context) => OptionItemQuantityPickerView(
             optionItem: optionItem,
+            initialQuantity: initialQuantity,
             maxQuantity: maxQuantity,
           )
         );

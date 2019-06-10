@@ -11,7 +11,7 @@ class OptionItemQuantityPickerView extends StatefulWidget {
     Key key,
     @required this.optionItem,
     this.initialQuantity = 1,
-    this.maxQuantity = 1
+    this.maxQuantity = 1,
   }) : super(key : key);
 
   final OptionItem optionItem;
