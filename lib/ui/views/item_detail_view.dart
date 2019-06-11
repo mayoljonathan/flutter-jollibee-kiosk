@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jollibee_kiosk/core/models/cart.dart';
 import 'package:jollibee_kiosk/core/viewmodels/item_detail_model.dart';
+import 'package:jollibee_kiosk/locator.dart';
 import 'package:jollibee_kiosk/ui/views/base_view.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -11,17 +13,41 @@ import 'package:jollibee_kiosk/ui/shared/theme.dart';
 import 'package:jollibee_kiosk/ui/widgets/item_options.dart';
 import 'package:jollibee_kiosk/ui/widgets/quantity_picker.dart';
 
-class ItemDetailView extends StatelessWidget {
-  ItemDetailView({@required this.item});
+class ItemDetailView extends StatefulWidget {
+  ItemDetailView({
+    @required this.heroTag,
+    @required this.item,
+    this.optionSelections,
+    this.quantity,
+    this.isEditing = false,
+    this.menuItemCartId
+  });
+
+  final String heroTag;
   final MenuItem item;
+  final Map<ItemOption, List<OptionItemCart>> optionSelections;
+  final int quantity;
+  final bool isEditing;
+  final String menuItemCartId;
 
   @override
+  _ItemDetailViewState createState() => _ItemDetailViewState();
+}
+
+class _ItemDetailViewState extends State<ItemDetailView> with SingleTickerProviderStateMixin {
+  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ItemDetailModel>(
-      builder: (BuildContext context) => ItemDetailModel(),
+    return Provider<ItemDetailModel>.value(
+      value: locator<ItemDetailModel>(),
       child: Consumer<ItemDetailModel>(
         builder: (context, model, child) {
-          model.selectedMenuItem = item;
+          print('BUILD!');
+          model.setInitialValues(
+            optionSelections: widget.optionSelections,
+            quantity: widget.quantity,
+            selectedMenuItem: widget.item,
+            isEditing: widget.isEditing
+          );
 
           return FullscreenDialog(
             child: SingleChildScrollView(
@@ -44,14 +70,17 @@ class ItemDetailView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    ItemOptions(
-                      hasAddOns: item.hasAddOns ?? false,
-                      hasDrinks: item.hasDrinks ?? false,
-                      maxDrinkSelection: item.maxDrinkSelection ?? 1,
-                      maxAddOnSelection: item.maxAddOnSelection ?? 1,
+                    ListenableProvider.value(
+                      listenable: locator<ItemDetailModel>(),
+                      child: ItemOptions(
+                        hasAddOns: widget.item.hasAddOns ?? false,
+                        hasDrinks: widget.item.hasDrinks ?? false,
+                        maxDrinkSelection: widget.item.maxDrinkSelection ?? 1,
+                        maxAddOnSelection: widget.item.maxAddOnSelection ?? 1,
+                      ),
                     ),
                     Divider(height: 48.0),
-                    _buildFooter(context, model)
+                    _buildFooter(context, null)
                   ],
                 )
               ),
@@ -60,6 +89,55 @@ class ItemDetailView extends StatelessWidget {
         },
       )
     );
+
+    // return ChangeNotifierProvider<ItemDetailModel>(
+    //   builder: (BuildContext context) => ItemDetailModel(),
+    //   child: Consumer<ItemDetailModel>(
+    //     builder: (context, model, child) {
+    //       // model.selectedMenuItem = item;
+    //       model.setInitialValues(
+    //         optionSelections: optionSelections,
+    //         quantity: quantity,
+    //         selectedMenuItem: item
+    //       );
+
+    //       return FullscreenDialog(
+    //         child: SingleChildScrollView(
+    //           physics: BouncingScrollPhysics(),
+    //           child: Container(
+    //             width: SizeConfig.screenWidth,
+    //             padding: const EdgeInsets.all(36.0),
+    //             child: Column(
+    //               crossAxisAlignment: CrossAxisAlignment.start,
+    //               mainAxisSize: MainAxisSize.min,
+    //               children: <Widget>[
+    //                 _buildHeader(),
+    //                 Padding(
+    //                   padding: const EdgeInsets.symmetric(vertical: 12.0),
+    //                   child: Row(
+    //                     children: <Widget>[
+    //                       _buildItemImage(),
+    //                       SizedBox(width: 24.0),
+    //                       Expanded(child: _buildItemName()),
+    //                     ],
+    //                   ),
+    //                 ),
+    //                 ItemOptions(
+    //                   hasAddOns: item.hasAddOns ?? false,
+    //                   hasDrinks: item.hasDrinks ?? false,
+    //                   maxDrinkSelection: item.maxDrinkSelection ?? 1,
+    //                   maxAddOnSelection: item.maxAddOnSelection ?? 1,
+    //                 ),
+    //                 Divider(height: 48.0),
+    //                 _buildFooter(context, model)
+    //               ],
+    //             )
+    //           ),
+    //         ),
+    //       );
+    //     },
+    //   )
+    // );
   }
 
   Widget _buildHeader() {
@@ -71,11 +149,11 @@ class ItemDetailView extends StatelessWidget {
 
   Widget _buildItemImage() {
     return Hero(
-      tag: item.id,
+      tag: widget.heroTag,
       child: FadeInImage.memoryNetwork(
-        key: ValueKey(item.id),
+        key: ValueKey(widget.item.id),
         placeholder: kTransparentImage,
-        image: item.image,
+        image: widget.item.image,
         fit: BoxFit.contain,
         width: (SizeConfig.blockSizeHorizontal * 30),
       ),
@@ -83,7 +161,7 @@ class ItemDetailView extends StatelessWidget {
   }
 
   Widget _buildItemName() {
-    return Text(item.name, style: TextStyle(
+    return Text(widget.item.name, style: TextStyle(
       fontSize: kSubheadTextSize,
     ));
   }
@@ -100,8 +178,14 @@ class ItemDetailView extends StatelessWidget {
                   fontSize: kBodyTextSize
                 )),
                 SizedBox(height: 12.0),
-                QuantityPicker(
-                  onChanged: (int qty) => model.quantity = qty
+                ListenableProvider(
+                  builder: (BuildContext context) => locator<ItemDetailModel>(),
+                  child: Consumer<ItemDetailModel>(
+                    builder: (context, model, child) => QuantityPicker(
+                      initialValue: model.quantity,
+                      onChanged: (int qty) => model.quantity = qty
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -109,7 +193,7 @@ class ItemDetailView extends StatelessWidget {
               top: 0,
               right: 0,
               bottom: 0,
-              child: _buildMealTotal(model)
+              child: _buildMealTotal()
             ),
           ],
         ),
@@ -119,7 +203,7 @@ class ItemDetailView extends StatelessWidget {
     );
   }
 
-  Widget _buildMealTotal(ItemDetailModel model) {
+  Widget _buildMealTotal() {
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -129,23 +213,33 @@ class ItemDetailView extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(9.0)
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Text('Meal Total', style: TextStyle(
-            fontSize: kBodyTextSize,
-          )),
-          Expanded(
-            child: Align(
-              alignment: Alignment.center,
-              child: Text(model.getMealTotalToString(), style: TextStyle(
-                fontSize: kActionButtonTextSize,
-                fontWeight: FontWeight.bold
-              )),
+      child: AnimatedSize(
+        duration: Duration(milliseconds: 400),
+        vsync: this,
+        curve: Curves.fastOutSlowIn,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Text('Meal Total', style: TextStyle(
+              fontSize: kBodyTextSize,
+            )),
+            Expanded(
+              child: Align(
+                alignment: Alignment.center,
+                child: ListenableProvider(
+                  builder: (BuildContext context) => locator<ItemDetailModel>(),
+                  child: Consumer<ItemDetailModel>(
+                    builder: (context, model, child) => Text(model.getMealTotalToString(), style: TextStyle(
+                      fontSize: kActionButtonTextSize,
+                      fontWeight: FontWeight.bold
+                    ))
+                  )
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -158,10 +252,13 @@ class ItemDetailView extends StatelessWidget {
         Expanded(child: 
           Consumer<ItemDetailModel>(
             builder: (context, model, child) => _buildActionButtonItem(context, 
-              text: 'Add to My Order', 
+              text: !widget.isEditing ? 'Add to My Order' : 'Update My Order', 
               color: kGreen,
               onTap: () {
-                model.onAddMenuItemToOrder(context, item: item);
+                if (!widget.isEditing) {
+                  return model.onAddMenuItemToOrder(context);
+                } 
+                model.onUpdateMenuItemFromOrder(context, id: widget.heroTag);
               }
             )
           )

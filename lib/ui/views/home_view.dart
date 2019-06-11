@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:jollibee_kiosk/core/viewmodels/menu_model.dart';
-import 'package:jollibee_kiosk/ui/widgets/item_grid.dart';
-import 'package:provider/provider.dart';
+import 'package:jollibee_kiosk/ui/shared/custom_ui.dart';
+import 'package:jollibee_kiosk/ui/shared/ui_helper.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import 'package:jollibee_kiosk/locator.dart';
-
-import 'package:jollibee_kiosk/core/services/menu_service.dart';
-import 'package:jollibee_kiosk/core/viewmodels/home_model.dart';
-import 'package:jollibee_kiosk/core/models/menu.dart';
-
+import 'package:jollibee_kiosk/core/viewmodels/menu_model.dart';
+import 'package:jollibee_kiosk/core/viewmodels/my_cart_model.dart';
+import 'package:jollibee_kiosk/ui/widgets/item_grid.dart';
 import 'package:jollibee_kiosk/ui/views/base_view.dart';
-
 import 'package:jollibee_kiosk/ui/shared/size_config.dart';
 import 'package:jollibee_kiosk/ui/shared/theme.dart';
-
 import 'package:jollibee_kiosk/ui/widgets/my_cart.dart';
 import 'package:jollibee_kiosk/ui/widgets/menu_list.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -28,9 +23,9 @@ class _HomeViewState extends State<HomeView> {
   MenuModel _model;
 
   @override
-  void initState() {
-    
-    super.initState();
+  void dispose() {
+    super.dispose();
+    locator<MyCartModel>().clearCart();
   }
 
   @override
@@ -88,9 +83,49 @@ class _HomeViewState extends State<HomeView> {
           Text(_model?.selectedMenu?.name ?? '' , style: TextStyle(
             fontSize: kTitleTextSize,
             fontWeight: FontWeight.bold
-          ))
+          )),
+          Spacer(),
+          Padding(
+            padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 2),
+            child: CustomBouncingContainer(
+              onTap: this._onBackToHomeTap,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.0),
+                  color: kRed,
+                ),
+                padding: const EdgeInsets.all(18.0),
+                child: Text('Back to Home', 
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: kActionButtonTextSize
+                  )
+                )
+              )
+            ),
+          )
         ],
       )
+    );
+  }
+
+  void _onBackToHomeTap() {
+    bool shouldPrompt = locator<MyCartModel>().items.length > 0;
+    if (!shouldPrompt) {
+      Navigator.of(context).pushNamedAndRemoveUntil('/entry', (Route<dynamic> route) => false);
+      return;
+    }
+
+    UIHelper().showConfirmDialog(
+      context: context, 
+      title: 'Discard your current order?',
+      message: 'You have items in your current order, do you want to discard and go back to home screen?',
+      cancelText: "CONTINUE ORDERING",
+      cancelColor: kGreen,
+      confirmText: 'DISCARD',
+      confirmColor: kRed,
+      onConfirm: () => Navigator.of(context).pushNamedAndRemoveUntil('/entry', (Route<dynamic> route) => false)
     );
   }
   

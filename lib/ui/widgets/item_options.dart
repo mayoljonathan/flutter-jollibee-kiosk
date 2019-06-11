@@ -54,13 +54,13 @@ class _ItemOptionsState extends State<ItemOptions> {
     switch (itemOption) {
       case ItemOption.Drink:
         String hintMessage = '';
-        if (widget.maxDrinkSelection > 1) hintMessage = '(Select ${widget.maxDrinkSelection})';
+        if (widget.maxDrinkSelection > 1) hintMessage = '(Select up to ${widget.maxDrinkSelection})';
 
         optionName = 'Drinks $hintMessage';
         break;
       case ItemOption.AddOn:
         String hintMessage = '';
-        if (widget.maxAddOnSelection > 1) hintMessage = '(Select ${widget.maxAddOnSelection})';
+        if (widget.maxAddOnSelection > 1) hintMessage = '(Select up to ${widget.maxAddOnSelection})';
 
         optionName = 'Add-On $hintMessage';
         break;

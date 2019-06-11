@@ -1,3 +1,4 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -14,21 +15,29 @@ class MenuList extends StatefulWidget {
   _MenuListState createState() => _MenuListState();
 }
 
-class _MenuListState extends State<MenuList> {
+class _MenuListState extends State<MenuList> with AfterLayoutMixin<MenuList> {
   List<Menu> _menus;
 
-  ScrollController _scrollController;
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _menus = Provider.of<List<Menu>>(context, listen: false);
-    _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
   }
 
   void _onScroll() {
     setState(() {});
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    _scrollController.animateTo(-24, 
+      curve: Curves.fastOutSlowIn,
+      duration: Duration(seconds: 1, milliseconds: 200)
+    );
   }
 
   bool _shouldArrowUpShow(bool arrowUp) {
@@ -108,7 +117,7 @@ class _MenuListState extends State<MenuList> {
         child: Icon(icon, size: SizeConfig.blockSizeHorizontal * 5),
       ),
     );
-  }
+  }  
 }
 
 class MenuTile extends StatelessWidget {
@@ -141,7 +150,6 @@ class MenuTile extends StatelessWidget {
                   fontWeight: FontWeight.w500
                 )
               ),
-              // Text(Provider.of<MenuModel>(context).isSelectedMenu(menu.documentID).toString())
             ],
           )
         ),

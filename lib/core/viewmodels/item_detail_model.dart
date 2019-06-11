@@ -2,13 +2,13 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:jollibee_kiosk/core/models/cart.dart';
 import 'package:jollibee_kiosk/core/viewmodels/my_cart_model.dart';
+import 'package:jollibee_kiosk/locator.dart';
 
 import 'package:jollibee_kiosk/ui/shared/ui_helper.dart';
 import 'package:jollibee_kiosk/ui/widgets/item_options.dart';
 import 'package:jollibee_kiosk/core/models/menu.dart';
 import 'package:jollibee_kiosk/core/models/option_category.dart';
 import 'package:jollibee_kiosk/core/viewmodels/base_model.dart';
-import 'package:provider/provider.dart';
 
 class ItemDetailModel extends BaseModel {
   ItemDetailModel() {
@@ -20,6 +20,7 @@ class ItemDetailModel extends BaseModel {
 
   MenuItem selectedMenuItem;
   Map<ItemOption, List<OptionItemCart>> _optionSelections;
+  bool isEditing = false;
 
   int _quantity = 1; // Number of items for this meal
   int get quantity => _quantity;
@@ -29,6 +30,20 @@ class ItemDetailModel extends BaseModel {
   }
   
   // PUBLIC METHODS
+
+  /// Call this function when editting the order item in cart
+  void setInitialValues({
+    @required Map<ItemOption, List<OptionItemCart>> optionSelections,
+    @required MenuItem selectedMenuItem,
+    @required int quantity,
+    @required bool isEditing,
+  }) {
+    this._optionSelections = optionSelections;
+    this.selectedMenuItem = selectedMenuItem;
+    this._quantity = quantity ?? 1;
+    this.isEditing = isEditing ?? false;
+  }
+
   int getOptionItemSelectedCount(ItemOption itemOption, OptionItem optionItem) {
     OptionItemCart oic = _getOptionItemCart(itemOption, optionItem);
     return oic == null ? 0 : oic.quantity;
@@ -93,16 +108,32 @@ class ItemDetailModel extends BaseModel {
     }
   }
 
-  void onAddMenuItemToOrder(BuildContext context, {MenuItem item}) {
+  void onAddMenuItemToOrder(BuildContext context) {
     final mic = MenuItemCart(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
       quantity: _quantity,
       menuItem: selectedMenuItem,
       drinks: _optionSelections[ItemOption.Drink],
       addOns: _optionSelections[ItemOption.AddOn],
     );
 
-    // TODO
-    // print(Provider.of<MyCartModel>(context, listen: false).items);
+    MyCartModel myCartModel = locator<MyCartModel>();
+    myCartModel.addMenuItem(mic);
+    Navigator.of(context).pop();
+  }
+
+  void onUpdateMenuItemFromOrder(BuildContext context, {String id}) {
+    final mic = MenuItemCart(
+      id: id,
+      quantity: _quantity,
+      menuItem: selectedMenuItem,
+      drinks: _optionSelections[ItemOption.Drink],
+      addOns: _optionSelections[ItemOption.AddOn],
+    );
+
+    MyCartModel myCartModel = locator<MyCartModel>();
+    myCartModel.updateMenuItem(mic);
+    Navigator.of(context).pop();
   }
 
   // PRIVATE
@@ -180,6 +211,7 @@ class ItemDetailModel extends BaseModel {
   void _addToOptionSelections(ItemOption itemOption, OptionItem optionItem, {int quantity = 1}) {
     _optionSelections[itemOption].add(OptionItemCart(
       id: optionItem.id,
+      name: optionItem.name,
       price: optionItem.price,
       quantity: quantity
     ));

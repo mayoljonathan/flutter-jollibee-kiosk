@@ -8,6 +8,7 @@ const kCanvasColor = Color(0xFFFAF9FA);
 const kYellow = Color(0xFFFFB617);
 const kRed = Color(0xFFE5163E);
 const kGreen = Colors.green;
+const kGrey = Colors.grey;
 
 double kTitleTextSize = SizeConfig.blockSizeHorizontal * 5;
 double kSubheadTextSize = SizeConfig.blockSizeHorizontal * 4;

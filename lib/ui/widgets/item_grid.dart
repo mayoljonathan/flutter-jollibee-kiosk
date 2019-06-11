@@ -55,8 +55,10 @@ class ItemTile extends StatelessWidget {
       upperBound: 0.25,
       onTap: () {
         Provider.of<ItemDetailModel>(context, listen: false).selectedMenuItem = item;
-        print(Provider.of<ItemDetailModel>(context, listen: false).selectedMenuItem);
-        Navigator.pushNamed(context, '/item-detail', arguments: item);
+        Navigator.pushNamed(context, '/item-detail', arguments: {
+          'heroTag': item.id,
+          'item': item,
+        });
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
