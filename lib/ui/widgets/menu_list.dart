@@ -36,7 +36,7 @@ class _MenuListState extends State<MenuList> with AfterLayoutMixin<MenuList> {
     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     _scrollController.animateTo(-24, 
       curve: Curves.fastOutSlowIn,
-      duration: Duration(seconds: 1, milliseconds: 200)
+      duration: Duration(milliseconds: 600)
     );
   }
 

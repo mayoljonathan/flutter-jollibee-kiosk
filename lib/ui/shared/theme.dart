@@ -10,13 +10,15 @@ const kRed = Color(0xFFE5163E);
 const kGreen = Colors.green;
 const kGrey = Colors.grey;
 
+// double kTitleTextSizeCache = SizeConfig.blockSizeHorizontal * 5; // It doesn't works without this
+
+// TODO: Doesn't shown when app is profile/release
 double kTitleTextSize = SizeConfig.blockSizeHorizontal * 5;
 double kSubheadTextSize = SizeConfig.blockSizeHorizontal * 4;
 double kActionButtonTextSize = SizeConfig.blockSizeHorizontal * 3;
 double kBodyTextSize = SizeConfig.blockSizeHorizontal * 2.5;
 double kCaptionTextSize = SizeConfig.blockSizeHorizontal * 2;
 double kOverlineTextSize = SizeConfig.blockSizeHorizontal * 1.8;
-
 
 final kFontFamily = 'GoogleSans';
 final kPrimaryTextColor = Color(0xFF3A444D);

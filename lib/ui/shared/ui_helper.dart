@@ -46,17 +46,9 @@ class UIHelper {
     String confirmText,
     Color cancelColor = kRed,
     Color confirmColor = kGreen,
-    // TextStyle cancelStyle,
-    // TextStyle confirmStyle,
     VoidCallback onCancel,
     @required VoidCallback onConfirm
   }) {
-
-    // TextStyle _defaultStyle = TextStyle(
-    //   color: Theme.of(context).primaryColor,
-    //   fontSize: kActionButtonTextSize
-    // );
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -106,10 +98,9 @@ class UIHelper {
   }
 
 
-  // TODO
   Widget _buildActionButtonItem(BuildContext context, {@required String text, VoidCallback onTap, Color color = kRed}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.only(top: 16.0, bottom: 16.0, right: 8.0),
       child: CustomBouncingContainer(
         onTap: onTap == null ? () => Navigator.pop(context) : onTap,
         child: Container(

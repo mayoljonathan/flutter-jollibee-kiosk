@@ -8,7 +8,9 @@ import 'package:jollibee_kiosk/ui/views/entry_view.dart';
 import 'package:jollibee_kiosk/ui/views/home_view.dart';
 import 'package:jollibee_kiosk/ui/views/item_detail_view.dart';
 import 'package:jollibee_kiosk/ui/views/option_item_quantity_picker_view.dart';
+import 'package:jollibee_kiosk/ui/views/review_order_view.dart';
 import 'package:jollibee_kiosk/ui/widgets/item_options.dart';
+import 'package:jollibee_kiosk/ui/widgets/my_order_list.dart';
 
 class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -52,6 +54,9 @@ class Router {
             maxQuantity: maxQuantity,
           )
         );
+      case '/review-order':
+        return MaterialPageRoute(builder: (_) => ReviewOrderView());
+
       default:
         return MaterialPageRoute(builder: (_) {
           return Scaffold(

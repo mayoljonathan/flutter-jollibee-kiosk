@@ -223,6 +223,7 @@ class _ItemDetailViewState extends State<ItemDetailView> with SingleTickerProvid
           children: <Widget>[
             Text('Meal Total', style: TextStyle(
               fontSize: kBodyTextSize,
+              fontWeight: FontWeight.w500
             )),
             Expanded(
               child: Align(

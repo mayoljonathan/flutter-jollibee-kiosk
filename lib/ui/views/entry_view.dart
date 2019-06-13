@@ -25,7 +25,6 @@ class _EntryViewState extends State<EntryView> {
 
   @override
   Widget build(BuildContext context) {
-    print('build EntryView');
     SizeConfig.init(context);
 
     return BaseView<EntryModel>(

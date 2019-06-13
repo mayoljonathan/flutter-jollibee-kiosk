@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:jollibee_kiosk/core/viewmodels/item_detail_model.dart';
 import 'package:jollibee_kiosk/ui/widgets/item_options.dart';
-import 'package:provider/provider.dart';
 
 import 'package:jollibee_kiosk/core/models/cart.dart';
-import 'package:jollibee_kiosk/locator.dart';
-import 'package:jollibee_kiosk/core/models/menu.dart';
-import 'package:jollibee_kiosk/core/models/option_category.dart';
-import 'package:jollibee_kiosk/core/services/menu_service.dart';
 import 'package:jollibee_kiosk/core/viewmodels/base_model.dart';
 
 class MyCartModel extends BaseModel {
   List<MenuItemCart> _items = [];
   List<MenuItemCart> get items => _items;
 
-  ScrollController scrollController = ScrollController();
+  final ScrollController scrollController = ScrollController();
+  final List<GlobalKey<AnimatedListState>> animatedListKeys = [
+    GlobalKey<AnimatedListState>(debugLabel: 'my_cart'),
+    GlobalKey<AnimatedListState>(debugLabel: 'review_order')
+  ];
+  // final GlobalKey<AnimatedListState> animatedListKey1 = GlobalKey<AnimatedListState>(debugLabel: 'my_cart');
+  // final GlobalKey<AnimatedListState> animatedListKey2 = GlobalKey<AnimatedListState>(debugLabel: 'review_order');
 
   double getOrderTotal() {
     double total = 0;
@@ -54,17 +54,19 @@ class MyCartModel extends BaseModel {
   }
   
   void addMenuItem(MenuItemCart mic) {
+    final int index = _items.length;
+    
     Future.delayed(Duration(milliseconds: 350), () {
       _items.add(mic);
 
       if (scrollController != null && scrollController.hasClients) {
-        Future.delayed(Duration(milliseconds: 100), () {
+        animatedListKeys[0].currentState.insertItem(index, duration: Duration(milliseconds: 400));
+        Future.delayed(Duration(milliseconds: 200), () {
           scrollController.animateTo(scrollController.position.maxScrollExtent, 
             duration: Duration(milliseconds: 400),
             curve: Curves.fastOutSlowIn
           );
         });
-
       }
       notifyListeners();
     });
@@ -80,8 +82,23 @@ class MyCartModel extends BaseModel {
     }
   }
 
-  void removeMenuItem(MenuItemCart mic) {
+  void removeMenuItem(MenuItemCart mic, {@required int index, @required Widget child}) {
     _items.remove(mic);
+
+    animatedListKeys.forEach((GlobalKey<AnimatedListState> key) {
+      key?.currentState?.removeItem(index, (BuildContext context, Animation<double> animation) {
+        return FadeTransition(
+          opacity: CurvedAnimation(parent: animation, curve: Interval(0.5, 1.0)),
+          child: SizeTransition(
+            sizeFactor: CurvedAnimation(parent: animation, curve: Interval(0.0, 1.0)),
+            axisAlignment: 0.0,
+            child: child,
+          ),
+        );
+      },
+      duration: Duration(milliseconds: 400));
+    });
+
     notifyListeners();
   }
 

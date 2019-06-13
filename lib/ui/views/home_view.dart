@@ -30,21 +30,24 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseView<MenuModel>(
-      onModelReady: (model) {
-        _model = model;
-        _model.setInitialSelectedMenu(context);
-      },
-      builder: (context, model, child) {
-        print('home view build');
-        return SafeArea(
-          child: Scaffold(
-            backgroundColor: kCanvasColor,
-            body: _buildBody(),
-            bottomNavigationBar: MyCart(),
-          ),
-        );
-      }
+    return WillPopScope(
+      onWillPop: this._onBackToHomeTap,
+      child: BaseView<MenuModel>(
+        onModelReady: (model) {
+          _model = model;
+          _model.setInitialSelectedMenu(context);
+        },
+        builder: (context, model, child) {
+          print('home view build');
+          return SafeArea(
+            child: Scaffold(
+              backgroundColor: kCanvasColor,
+              body: _buildBody(),
+              bottomNavigationBar: MyCart(),
+            ),
+          );
+        }
+      ),
     );
   }
 
@@ -52,7 +55,14 @@ class _HomeViewState extends State<HomeView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _buildHeader(),
+        Hero(
+          tag: 'header-title',
+          child: Material(
+            color: Colors.transparent,
+            child: _buildHeader()
+          )
+        ),
+        Divider(height: 1.0),
         Expanded(
           child: Row(
             children: <Widget>[
@@ -87,22 +97,24 @@ class _HomeViewState extends State<HomeView> {
           Spacer(),
           Padding(
             padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 2),
-            child: CustomBouncingContainer(
-              onTap: this._onBackToHomeTap,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12.0),
-                  color: kRed,
-                ),
-                padding: const EdgeInsets.all(18.0),
-                child: Text('Back to Home', 
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: kActionButtonTextSize
+            child: FittedBox(
+              child: CustomBouncingContainer(
+                onTap: this._onBackToHomeTap,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12.0),
+                    color: kRed,
+                  ),
+                  padding: const EdgeInsets.all(18.0),
+                  child: Text('Back to Home', 
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: kActionButtonTextSize
+                    )
                   )
                 )
-              )
+              ),
             ),
           )
         ],
@@ -110,11 +122,11 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  void _onBackToHomeTap() {
+  Future<bool> _onBackToHomeTap() async {
     bool shouldPrompt = locator<MyCartModel>().items.length > 0;
     if (!shouldPrompt) {
       Navigator.of(context).pushNamedAndRemoveUntil('/entry', (Route<dynamic> route) => false);
-      return;
+      return false;
     }
 
     UIHelper().showConfirmDialog(
@@ -127,6 +139,8 @@ class _HomeViewState extends State<HomeView> {
       confirmColor: kRed,
       onConfirm: () => Navigator.of(context).pushNamedAndRemoveUntil('/entry', (Route<dynamic> route) => false)
     );
+
+    return false;
   }
   
 }
