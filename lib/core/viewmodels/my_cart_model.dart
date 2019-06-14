@@ -52,15 +52,25 @@ class MyCartModel extends BaseModel {
     _items.forEach((MenuItemCart mic) => total += mic.quantity);
     return total;
   }
+
+  String getMyOrderTitle() {
+    String text = 'My Order';
+    if (_items.length > 0) {
+      if (getTotalItemsIncludeItemQty() == 1) text += ' (1 item)';
+      else text += ' (${getTotalItemsIncludeItemQty()} items)';
+    } 
+    return text;
+  }
   
   void addMenuItem(MenuItemCart mic) {
     final int index = _items.length;
     
     Future.delayed(Duration(milliseconds: 350), () {
       _items.add(mic);
+      notifyListeners();
 
       if (scrollController != null && scrollController.hasClients) {
-        animatedListKeys[0].currentState.insertItem(index, duration: Duration(milliseconds: 400));
+        animatedListKeys[0].currentState.insertItem(index, duration: Duration(milliseconds: 600));
         Future.delayed(Duration(milliseconds: 200), () {
           scrollController.animateTo(scrollController.position.maxScrollExtent, 
             duration: Duration(milliseconds: 400),
@@ -68,7 +78,6 @@ class MyCartModel extends BaseModel {
           );
         });
       }
-      notifyListeners();
     });
   }
 
@@ -84,6 +93,7 @@ class MyCartModel extends BaseModel {
 
   void removeMenuItem(MenuItemCart mic, {@required int index, @required Widget child}) {
     _items.remove(mic);
+    notifyListeners();
 
     animatedListKeys.forEach((GlobalKey<AnimatedListState> key) {
       key?.currentState?.removeItem(index, (BuildContext context, Animation<double> animation) {
@@ -98,8 +108,6 @@ class MyCartModel extends BaseModel {
       },
       duration: Duration(milliseconds: 400));
     });
-
-    notifyListeners();
   }
 
   void onEditMenuItem(BuildContext context, MenuItemCart mic) {

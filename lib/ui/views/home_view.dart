@@ -110,7 +110,8 @@ class _HomeViewState extends State<HomeView> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: kActionButtonTextSize
+                      fontSize: kActionButtonTextSize,
+                      fontWeight: FontWeight.bold
                     )
                   )
                 )

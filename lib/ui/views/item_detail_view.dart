@@ -89,55 +89,6 @@ class _ItemDetailViewState extends State<ItemDetailView> with SingleTickerProvid
         },
       )
     );
-
-    // return ChangeNotifierProvider<ItemDetailModel>(
-    //   builder: (BuildContext context) => ItemDetailModel(),
-    //   child: Consumer<ItemDetailModel>(
-    //     builder: (context, model, child) {
-    //       // model.selectedMenuItem = item;
-    //       model.setInitialValues(
-    //         optionSelections: optionSelections,
-    //         quantity: quantity,
-    //         selectedMenuItem: item
-    //       );
-
-    //       return FullscreenDialog(
-    //         child: SingleChildScrollView(
-    //           physics: BouncingScrollPhysics(),
-    //           child: Container(
-    //             width: SizeConfig.screenWidth,
-    //             padding: const EdgeInsets.all(36.0),
-    //             child: Column(
-    //               crossAxisAlignment: CrossAxisAlignment.start,
-    //               mainAxisSize: MainAxisSize.min,
-    //               children: <Widget>[
-    //                 _buildHeader(),
-    //                 Padding(
-    //                   padding: const EdgeInsets.symmetric(vertical: 12.0),
-    //                   child: Row(
-    //                     children: <Widget>[
-    //                       _buildItemImage(),
-    //                       SizedBox(width: 24.0),
-    //                       Expanded(child: _buildItemName()),
-    //                     ],
-    //                   ),
-    //                 ),
-    //                 ItemOptions(
-    //                   hasAddOns: item.hasAddOns ?? false,
-    //                   hasDrinks: item.hasDrinks ?? false,
-    //                   maxDrinkSelection: item.maxDrinkSelection ?? 1,
-    //                   maxAddOnSelection: item.maxAddOnSelection ?? 1,
-    //                 ),
-    //                 Divider(height: 48.0),
-    //                 _buildFooter(context, model)
-    //               ],
-    //             )
-    //           ),
-    //         ),
-    //       );
-    //     },
-    //   )
-    // );
   }
 
   Widget _buildHeader() {
@@ -281,7 +232,8 @@ class _ItemDetailViewState extends State<ItemDetailView> with SingleTickerProvid
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
-            fontSize: kActionButtonTextSize
+            fontSize: kActionButtonTextSize,
+            fontWeight: FontWeight.bold
           )
         )
       )

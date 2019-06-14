@@ -68,7 +68,7 @@ class MyOrderList extends StatelessWidget {
   }
 }
 
-class MyOrderItemTile extends StatelessWidget {
+class MyOrderItemTile extends StatefulWidget {
   MyOrderItemTile({
     Key key,
     @required this.item,
@@ -79,48 +79,59 @@ class MyOrderItemTile extends StatelessWidget {
   final int index;
 
   @override
+  _MyOrderItemTileState createState() => _MyOrderItemTileState();
+}
+
+class _MyOrderItemTileState extends State<MyOrderItemTile> with TickerProviderStateMixin {
+  
+  @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      child: Column(
-        children: <Widget>[
-          InkWell(
-            onTap: () => Provider.of<MyCartModel>(context).onEditMenuItem(context, item),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    _buildQuantity(context),
-                    _buildImage(),
-                    Expanded(child: _buildName()),
-                    _buildPrice(context),
-                  ],
-                ),
-                if (item.drinks.length > 0 || item.addOns.length > 0) Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 52, right: 16),
-                      child: Text('Includes:', style: TextStyle(
-                        fontSize: kCaptionTextSize
-                      ))
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        if (item.drinks.length > 0) ..._buildOptionItemList(item.drinks),
-                        if (item.addOns.length > 0) ..._buildOptionItemList(item.addOns),
-                      ],
-                    )
-                  ],
-                ),
-                _buildActionButtons(context),
-              ],
+      child: AnimatedSize(
+        vsync: this,
+        duration: Duration(milliseconds: 600),
+        curve: Curves.fastOutSlowIn,
+        child: Column(
+          children: <Widget>[
+            InkWell(
+              onTap: () => Provider.of<MyCartModel>(context).onEditMenuItem(context, widget.item),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      _buildQuantity(context),
+                      _buildImage(),
+                      Expanded(child: _buildName()),
+                      _buildPrice(context),
+                    ],
+                  ),
+                  if (widget.item.drinks.length > 0 || widget.item.addOns.length > 0) Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 52, right: 16),
+                        child: Text('Includes:', style: TextStyle(
+                          fontSize: kCaptionTextSize
+                        ))
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          if (widget.item.drinks.length > 0) ..._buildOptionItemList(widget.item.drinks),
+                          if (widget.item.addOns.length > 0) ..._buildOptionItemList(widget.item.addOns),
+                        ],
+                      )
+                    ],
+                  ),
+                  _buildActionButtons(context),
+                ],
+              ),
             ),
-          ),
-          Divider(),
-        ],
+            Divider(),
+          ],
+        ),
       ),
     );
   }
@@ -134,12 +145,12 @@ class MyOrderItemTile extends StatelessWidget {
           _buildActionButtonItem(context, 
             text: 'Edit', 
             color: kGreen,
-            onTap: () => Provider.of<MyCartModel>(context).onEditMenuItem(context, item)
+            onTap: () => Provider.of<MyCartModel>(context).onEditMenuItem(context, widget.item)
           ),
           SizedBox(width: 6.0),
           _buildActionButtonItem(context, 
             text: 'Remove',
-            onTap: () => Provider.of<MyCartModel>(context).removeMenuItem(item, index: index, child: build(context))
+            onTap: () => Provider.of<MyCartModel>(context).removeMenuItem(widget.item, index: widget.index, child: build(context))
           ),
         ],
       ),
@@ -159,7 +170,8 @@ class MyOrderItemTile extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
-            fontSize: SizeConfig.blockSizeHorizontal * 2.3
+            fontSize: SizeConfig.blockSizeHorizontal * 2.3,
+            fontWeight: FontWeight.w500
           )
         )
       )
@@ -178,7 +190,7 @@ class MyOrderItemTile extends StatelessWidget {
         color: Colors.grey[200],
         borderRadius: BorderRadius.circular(6.0)
       ),
-      child: Text('x${item.quantity.toString()}', style: TextStyle(
+      child: Text('x${widget.item.quantity.toString()}', style: TextStyle(
         fontWeight: FontWeight.w500,
         fontSize: kOverlineTextSize
       ))
@@ -188,13 +200,13 @@ class MyOrderItemTile extends StatelessWidget {
   Widget _buildImage() {
     double size = SizeConfig.blockSizeHorizontal * 10;
     return Hero(
-      tag: item.id,
+      tag: widget.item.id,
       placeholderBuilder: (context, widget) => widget,
       child: FadeInImage.memoryNetwork(
         width: size,
         height: size,
         placeholder: kTransparentImage,
-        image: item.menuItem.image,
+        image: widget.item.menuItem.image,
         fit: BoxFit.contain
       )
     );
@@ -203,7 +215,7 @@ class MyOrderItemTile extends StatelessWidget {
   Widget _buildName() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6.0),
-      child: Text(item.menuItem.name, style: TextStyle(
+      child: Text(widget.item.menuItem.name, style: TextStyle(
         fontSize: kCaptionTextSize,
         fontWeight: FontWeight.bold
       )),
@@ -211,13 +223,13 @@ class MyOrderItemTile extends StatelessWidget {
   }
 
   List<Widget> _buildOptionItemList(List<OptionItemCart> oicList) {
-    return oicList.map((OptionItemCart oic) => Text('${oic.name} x${oic.quantity * item.quantity}', style: TextStyle(
+    return oicList.map((OptionItemCart oic) => Text('${oic.name} x${oic.quantity * widget.item.quantity}', style: TextStyle(
       fontSize: kCaptionTextSize
     ))).toList();
   }
 
   Widget _buildPrice(context) {
-    String priceAsString = Provider.of<MyCartModel>(context).getTotalPricePerMenuItemCartToString(item);
+    String priceAsString = Provider.of<MyCartModel>(context).getTotalPricePerMenuItemCartToString(widget.item);
     return Text(priceAsString, style: TextStyle(
       fontSize: kCaptionTextSize,
       fontWeight: FontWeight.w500

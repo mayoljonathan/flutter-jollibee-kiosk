@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:jollibee_kiosk/locator.dart';
@@ -23,8 +24,10 @@ import 'package:jollibee_kiosk/ui/views/entry_view.dart';
 //   runApp(MyApp(firebaseApp: firebaseApp));
 // }
 
-void main() {
+void main() async {
   setupLocator();
+
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MyApp());
 }
 

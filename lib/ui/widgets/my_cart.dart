@@ -49,17 +49,11 @@ class MyCart extends StatelessWidget {
             builder: (BuildContext context) => locator<MyCartModel>(),
             child: Consumer<MyCartModel>(
               builder: (context, model, child) {
-                String text = 'My Order';
-                if (model.items.length > 0) {
-                  if (model.items.length == 1) text += ' (1 item)';
-                  else text += ' (${model.getTotalItemsIncludeItemQty()} items)';
-                } 
-
                 return Hero(
                   tag: 'order-title',
                   child: Material(
                     color: Colors.transparent,
-                    child: Text(text, style: TextStyle(
+                    child: Text(model.getMyOrderTitle(), style: TextStyle(
                       fontSize: kSubheadTextSize,
                       fontWeight: FontWeight.w500
                     )),
@@ -146,7 +140,8 @@ class MyCart extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: kActionButtonTextSize
+                      fontSize: kActionButtonTextSize,
+                      fontWeight: FontWeight.bold
                     )
                   )
                 )

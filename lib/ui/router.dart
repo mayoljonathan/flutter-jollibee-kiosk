@@ -8,6 +8,7 @@ import 'package:jollibee_kiosk/ui/views/entry_view.dart';
 import 'package:jollibee_kiosk/ui/views/home_view.dart';
 import 'package:jollibee_kiosk/ui/views/item_detail_view.dart';
 import 'package:jollibee_kiosk/ui/views/option_item_quantity_picker_view.dart';
+import 'package:jollibee_kiosk/ui/views/payment_view.dart';
 import 'package:jollibee_kiosk/ui/views/review_order_view.dart';
 import 'package:jollibee_kiosk/ui/widgets/item_options.dart';
 import 'package:jollibee_kiosk/ui/widgets/my_order_list.dart';
@@ -56,6 +57,9 @@ class Router {
         );
       case '/review-order':
         return MaterialPageRoute(builder: (_) => ReviewOrderView());
+
+      case '/payment':
+        return MaterialPageRoute(builder: (_) => PaymentView());
 
       default:
         return MaterialPageRoute(builder: (_) {
