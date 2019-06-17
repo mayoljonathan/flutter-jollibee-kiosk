@@ -201,7 +201,7 @@ class _MyOrderItemTileState extends State<MyOrderItemTile> with TickerProviderSt
     double size = SizeConfig.blockSizeHorizontal * 10;
     return Hero(
       tag: widget.item.id,
-      placeholderBuilder: (context, widget) => widget,
+      placeholderBuilder: (context, size, widget) => widget,
       child: FadeInImage.memoryNetwork(
         width: size,
         height: size,

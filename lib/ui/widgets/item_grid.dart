@@ -71,7 +71,7 @@ class ItemTile extends StatelessWidget {
                 Positioned.fill(
                   child: Hero(
                     tag: item.id,
-                    placeholderBuilder: (context, widget) => widget,
+                    placeholderBuilder: (context, size, widget) => widget,
                     child: FadeInImage.memoryNetwork(
                       key: ValueKey(item.id),
                       placeholder: kTransparentImage,

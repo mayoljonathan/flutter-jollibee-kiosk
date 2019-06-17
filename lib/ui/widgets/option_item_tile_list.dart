@@ -183,7 +183,7 @@ class OptionItemTile extends StatelessWidget {
                         Positioned.fill(
                           child: Hero(
                             tag: 'optionItem-${optionItem.id}',
-                            placeholderBuilder: (context, widget) => widget,
+                            placeholderBuilder: (context, size, widget) => widget,
                             child: FadeInImage.memoryNetwork(
                               key: ValueKey(optionItem.id),
                               placeholder: kTransparentImage,
