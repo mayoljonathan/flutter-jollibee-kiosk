@@ -19,17 +19,26 @@ class PaymentView extends StatefulWidget {
 class _PaymentViewState extends State<PaymentView> with TickerProviderStateMixin {
 
   AnimationController _cardContainerAnimationController;            
+  Animation<double> _cardContainerAnimation;
+
   PaymentModel _model;
 
   @override
   void initState() {
     super.initState();
     _cardContainerAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 350), 
+      duration: const Duration(milliseconds: 400), 
       vsync: this,
       lowerBound: 0.1,
       upperBound: 1
     );            
+
+    _cardContainerAnimation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+      parent: _cardContainerAnimationController,
+      curve:  Curves.fastOutSlowIn,
+      reverseCurve: Curves.fastOutSlowIn
+    ));
+
     _cardContainerAnimationController.addListener(() => setState(() {}));
     _cardContainerAnimationController.forward();
   }
@@ -97,9 +106,9 @@ class _PaymentViewState extends State<PaymentView> with TickerProviderStateMixin
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 48.0),
                         child: Transform.scale(
-                          scale: _cardContainerAnimationController.value,
+                          scale: _cardContainerAnimation.value,
                           child: AnimatedOpacity(
-                            opacity: _cardContainerAnimationController.value,
+                            opacity: _cardContainerAnimation.value,
                             duration: Duration(milliseconds: 200),
                             child: AnimatedSize(
                               duration: Duration(milliseconds: 350),
@@ -114,30 +123,6 @@ class _PaymentViewState extends State<PaymentView> with TickerProviderStateMixin
                   )
                 ],
               );
-
-              // return SizedBox(
-              //   width: SizeConfig.blockSizeHorizontal * 80,
-              //   child: Card(
-              //     elevation: 16,
-              //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
-              //     child: Padding(
-              //       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 48.0),
-              //       child: Transform.scale(
-              //         scale: _cardContainerAnimationController.value,
-              //         child: AnimatedOpacity(
-              //           opacity: _cardContainerAnimationController.value,
-              //           duration: Duration(milliseconds: 200),
-              //           child: AnimatedSize(
-              //             duration: Duration(milliseconds: 350),
-              //             vsync: this,
-              //             curve: Curves.fastOutSlowIn,
-              //             child: widget,
-              //           )
-              //         )
-              //       )
-              //     ),
-              //   ),
-              // );
             }
           )
         )

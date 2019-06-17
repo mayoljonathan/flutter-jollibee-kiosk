@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:jollibee_kiosk/core/models/cart.dart';
 import 'package:jollibee_kiosk/core/viewmodels/item_detail_model.dart';
 import 'package:jollibee_kiosk/locator.dart';
-import 'package:jollibee_kiosk/ui/views/base_view.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
