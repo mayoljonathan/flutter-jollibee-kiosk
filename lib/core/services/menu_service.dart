@@ -27,12 +27,6 @@ class MenuService {
       menus = snapshot.documents.map((DocumentSnapshot doc) => Menu.fromSnapshot(doc)).toList();
     }
 
-    // return Future.delayed(Duration(seconds: 1), () {
-    //   menuController.add(menus);
-    //   _menu = menus;
-    //   return menus;
-    // });
-
     menuController.add(menus);
     _menu = menus;
     return menus;
@@ -49,10 +43,8 @@ class MenuService {
       drinks = snapshot.documents.map((DocumentSnapshot doc) => OptionCategory.fromSnapshot(doc)).toList();
     }
 
-    // return Future.delayed(Duration(seconds: 1), () {
     _drinks = drinks;
     return drinks;
-    // });
   }
 
   Future<List<OptionCategory>> getAddOns(context) async {
@@ -66,10 +58,8 @@ class MenuService {
       addOns = snapshot.documents.map((DocumentSnapshot doc) => OptionCategory.fromSnapshot(doc)).toList();
     }
 
-    // return Future.delayed(Duration(seconds: 1), () {
     _addOns = addOns;
     return addOns;
-    // });
   }
 
 }

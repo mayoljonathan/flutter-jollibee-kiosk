@@ -5,6 +5,7 @@ import 'package:jollibee_kiosk/ui/shared/custom_ui.dart';
 
 import 'package:jollibee_kiosk/ui/shared/size_config.dart';
 import 'package:jollibee_kiosk/ui/shared/theme.dart';
+import 'package:jollibee_kiosk/ui/widgets/order_total.dart';
 import 'package:provider/provider.dart';
 
 import 'my_order_list.dart';
@@ -82,75 +83,38 @@ class MyCart extends StatelessWidget {
   }
 
   Widget _buildRightLayout() {
-    return ListenableProvider(
-      builder: (BuildContext context) => locator<MyCartModel>(),
-      child: Consumer<MyCartModel>(
-        builder: (context, model, child) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Expanded(
-                child: Hero(
-                  tag: 'order-total',
-                  child: Material(
-                    color: Colors.transparent,
-                    child: Container(
-                      padding: const EdgeInsets.all(12.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: kRed,
-                          width: 2
-                        ),
-                        borderRadius: BorderRadius.circular(9.0)
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          Text('Order Total', style: TextStyle(
-                            fontSize: kActionButtonTextSize,
-                          )),
-                          Expanded(
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text(Provider.of<MyCartModel>(context).getOrderTotalToString(), style: TextStyle(
-                                fontSize: kSubheadTextSize,
-                                fontWeight: FontWeight.bold
-                              )),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        Expanded(child: OrderTotal()),
+        SizedBox(height: 18.0),
+        ListenableProvider(
+          builder: (BuildContext context) => locator<MyCartModel>(),
+          child: Consumer<MyCartModel>(
+            builder: (context, model, child) => CustomBouncingContainer(
+              onTap: () => this._onReviewOrderTap(context),
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.0),
+                  color: Provider.of<MyCartModel>(context).items.length == 0 ? kGrey : kGreen,
                 ),
-              ),
-              SizedBox(height: 18.0),
-              CustomBouncingContainer(
-                onTap: () => this._onReviewOrderTap(context),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12.0),
-                    color: Provider.of<MyCartModel>(context).items.length == 0 ? kGrey : kGreen,
-                  ),
-                  padding: const EdgeInsets.all(24.0),
-                  child: Text('Review Order', 
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: kActionButtonTextSize,
-                      fontWeight: FontWeight.bold
-                    )
+                padding: const EdgeInsets.all(24.0),
+                child: Text('Review Order', 
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: kActionButtonTextSize,
+                    fontWeight: FontWeight.bold
                   )
                 )
               )
-            ],
-          );    
-        }
-      )
-    );
+            )
+          )
+        )
+      ],
+    );    
   }
 
   void _onReviewOrderTap(context) {

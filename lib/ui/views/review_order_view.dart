@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:transparent_image/transparent_image.dart';
+
 import 'package:jollibee_kiosk/core/viewmodels/my_cart_model.dart';
 import 'package:jollibee_kiosk/locator.dart';
 import 'package:jollibee_kiosk/ui/shared/custom_ui.dart';
 import 'package:jollibee_kiosk/ui/shared/size_config.dart';
 import 'package:jollibee_kiosk/ui/shared/theme.dart';
 import 'package:jollibee_kiosk/ui/widgets/my_order_list.dart';
-import 'package:provider/provider.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:jollibee_kiosk/ui/widgets/order_total.dart';
 
 class ReviewOrderView extends StatelessWidget {
   ReviewOrderView({Key key});
@@ -32,10 +34,13 @@ class ReviewOrderView extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 2),
             width: SizeConfig.blockSizeHorizontal * 20,
-            child: FadeInImage(
-              placeholder: MemoryImage(kTransparentImage),
-              image: AssetImage('assets/images/jollibee_icon.png'),
-            )
+            child: Hero(
+              tag: 'jollibee_logo',
+              child: FadeInImage(
+                placeholder: MemoryImage(kTransparentImage),
+                image: AssetImage('assets/images/jollibee_icon.png'),
+              )
+            ),
           ),
           Text('Review your Order' , style: TextStyle(
             fontSize: kTitleTextSize,
@@ -50,13 +55,14 @@ class ReviewOrderView extends StatelessWidget {
     return Container(
       child: Column(
         children: <Widget>[
-          Hero(
-            tag: 'header-title',
-            child: Material(
-              color: Colors.transparent,
-              child: _buildHeader()
-            )
-          ),
+          // Hero(
+          //   tag: 'header-title',
+          //   child: Material(
+          //     color: Colors.transparent,
+          //     child: _buildHeader()
+          //   )
+          // ),
+          _buildHeader(),
           Divider(height: 1.0),
           Expanded(
             child: Container(
@@ -118,7 +124,7 @@ class ReviewOrderView extends StatelessWidget {
                 ),
                 SizedBox(width: 48),
                 Expanded(
-                  child: _buildOrderTotal()
+                  child: OrderTotal()
                 ),
                 SizedBox(width: 48),
                 Expanded(
@@ -142,67 +148,31 @@ class ReviewOrderView extends StatelessWidget {
   }
 
   Widget _buildActionButtonItem(BuildContext context, {@required String text, VoidCallback onTap, Color color = kRed}) {
-    return CustomBouncingContainer(
-      onTap: onTap == null ? () => Navigator.pop(context) : onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.0),
-          color: color,
-        ),
-        padding: const EdgeInsets.all(18.0),
-        child: Center(
-          child: Text(text, 
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: kActionButtonTextSize,
-              fontWeight: FontWeight.bold
-            )
-          ),
-        )
-      )
-    );
-  }
-
-  Widget _buildOrderTotal() {
-    return ListenableProvider(
-      builder: (BuildContext context) => locator<MyCartModel>(),
-      child: Consumer<MyCartModel>(
-        builder: (context, model, child) => Hero(
-          tag: 'order-total',
-          child: Material(
-            color: Colors.transparent,
-            child: Container(
-              padding: const EdgeInsets.all(12.0),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: kRed,
-                  width: 2
-                ),
-                borderRadius: BorderRadius.circular(9.0)
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Text('Order Total', style: TextStyle(
-                    fontSize: kActionButtonTextSize,
-                  )),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(Provider.of<MyCartModel>(context).getOrderTotalToString(), style: TextStyle(
-                        fontSize: kSubheadTextSize,
-                        fontWeight: FontWeight.bold
-                      )),
-                    ),
-                  ),
-                ],
-              ),
+    return Hero(
+      tag: text,
+      child: Material(
+        type: MaterialType.transparency,
+        child: CustomBouncingContainer(
+          onTap: onTap == null ? () => Navigator.pop(context) : onTap,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.0),
+              color: color,
             ),
-          ),
-        )
-      )
+            padding: const EdgeInsets.all(18.0),
+            child: Center(
+              child: Text(text, 
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: kActionButtonTextSize,
+                  fontWeight: FontWeight.bold
+                )
+              ),
+            )
+          )
+        ),
+      ),
     );
   }
 

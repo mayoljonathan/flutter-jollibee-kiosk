@@ -55,13 +55,14 @@ class _HomeViewState extends State<HomeView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Hero(
-          tag: 'header-title',
-          child: Material(
-            color: Colors.transparent,
-            child: _buildHeader()
-          )
-        ),
+        // Hero(
+        //   tag: 'header-title',
+        //   child: Material(
+        //     color: Colors.transparent,
+        //     child: _buildHeader()
+        //   )
+        // ),
+        _buildHeader(),
         Divider(height: 1.0),
         Expanded(
           child: Row(
@@ -85,10 +86,13 @@ class _HomeViewState extends State<HomeView> {
           Container(
             padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 2),
             width: SizeConfig.blockSizeHorizontal * 20,
-            child: FadeInImage(
-              placeholder: MemoryImage(kTransparentImage),
-              image: AssetImage('assets/images/jollibee_icon.png'),
-            )
+            child: Hero(
+              tag: 'jollibee_logo',
+              child: FadeInImage(
+                placeholder: MemoryImage(kTransparentImage),
+                image: AssetImage('assets/images/jollibee_icon.png'),
+              )
+            ),
           ),
           Text(_model?.selectedMenu?.name ?? '' , style: TextStyle(
             fontSize: kTitleTextSize,
