@@ -4,7 +4,7 @@ import 'base_item.dart';
 
 part 'menu.g.dart';
 
-@JsonSerializable(nullable: true)
+@JsonSerializable(nullable: true, explicitToJson: true)
 class Menu {
 
   String id;
@@ -23,7 +23,7 @@ class Menu {
 
 }
 
-@JsonSerializable(nullable: true)
+@JsonSerializable(nullable: true, explicitToJson: true)
 class MenuItem extends BaseItem {
   final String id;
   final String name;
@@ -45,6 +45,6 @@ class MenuItem extends BaseItem {
     this.maxAddOnSelection,
   });
 
+  Map<String, dynamic> toJson() => _$MenuItemToJson(this);
   factory MenuItem.fromJson(Map<String, dynamic> json) => _$MenuItemFromJson(json);
-
 }

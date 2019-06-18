@@ -25,8 +25,6 @@ class _EntryViewState extends State<EntryView> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig.init(context);
-
     return BaseView<EntryModel>(
       onModelReady: (model) {
         _model = model;
@@ -55,7 +53,7 @@ class _EntryViewState extends State<EntryView> {
               )
             ),
             Padding(
-              padding: EdgeInsets.only(top: SizeConfig.blockSizeHorizontal * 10),
+              padding: EdgeInsets.only(top: 64),
               child: _buildContentState()
             )
           ],
@@ -95,7 +93,7 @@ class _EntryViewState extends State<EntryView> {
         ),
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(6.0),
+            padding: const EdgeInsets.all(18.0),
             child: Text('Touch to Start', 
               textAlign: TextAlign.center,
               style: TextStyle(

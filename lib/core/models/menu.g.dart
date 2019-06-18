@@ -21,7 +21,7 @@ Map<String, dynamic> _$MenuToJson(Menu instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'image': instance.image,
-      'items': instance.items
+      'items': instance.items?.map((e) => e?.toJson())?.toList()
     };
 
 MenuItem _$MenuItemFromJson(Map<String, dynamic> json) {

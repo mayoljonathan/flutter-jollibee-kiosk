@@ -14,8 +14,6 @@ class MyCartModel extends BaseModel {
     GlobalKey<AnimatedListState>(debugLabel: 'my_cart'),
     GlobalKey<AnimatedListState>(debugLabel: 'review_order')
   ];
-  // final GlobalKey<AnimatedListState> animatedListKey1 = GlobalKey<AnimatedListState>(debugLabel: 'my_cart');
-  // final GlobalKey<AnimatedListState> animatedListKey2 = GlobalKey<AnimatedListState>(debugLabel: 'review_order');
 
   double getOrderTotal() {
     double total = 0;

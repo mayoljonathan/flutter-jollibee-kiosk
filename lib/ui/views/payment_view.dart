@@ -69,6 +69,7 @@ class _PaymentViewState extends State<PaymentView> with TickerProviderStateMixin
           child: Consumer<PaymentModel>(
             builder: (context, model, child) {
               _model = model;
+              _model.animationController = _cardContainerAnimationController;
               Widget widget = Container();
 
               switch (model.paymentViewStep) {
@@ -80,6 +81,9 @@ class _PaymentViewState extends State<PaymentView> with TickerProviderStateMixin
                   break;
                 case PaymentViewStep.PROCESSING:
                   widget = _buildProcessingLayout();
+                  break;
+                case PaymentViewStep.ORDER_FAILED:
+                  widget = _buildOrderFailedLayout();
                   break;
               }
               
@@ -229,12 +233,7 @@ class _PaymentViewState extends State<PaymentView> with TickerProviderStateMixin
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             _buildServiceModeChoiceItem('At Counter', 'assets/images/at_counter.png',
-              onTap: () async {
-                await _cardContainerAnimationController.reverse();
-                _model.paymentViewStep = PaymentViewStep.PROCESSING;
-                _model.orderDto.paymentType = PaymentType.AT_COUNTER;
-                _cardContainerAnimationController.forward();
-              }
+              onTap: () => _model.onPaymentTypeTap(context, PaymentType.AT_COUNTER)
             ),
           ],
         )
@@ -263,9 +262,32 @@ class _PaymentViewState extends State<PaymentView> with TickerProviderStateMixin
           ],
         ),
         SizedBox(height: 24.0),
-        Text('Processing. Please wait.', style: TextStyle(
+        Text('Processing Order. Please wait.', style: TextStyle(
           fontSize: kTitleTextSize
         ))
+      ],
+    );
+  }
+
+  Widget _buildOrderFailedLayout() {
+    return Column(
+      children: <Widget>[
+        Text('Order failed. Please try again.', 
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: kTitleTextSize,
+            fontWeight: FontWeight.bold
+          )
+        ),
+        SizedBox(height: 64.0),
+        SizedBox(
+          width: 200,
+          child: _buildActionButtonItem(context, 
+            text: 'Retry',
+            color: kGreen,
+            onTap: () => _model.onPaymentTypeTap(context, _model.orderDto.paymentType)
+          ),
+        ),
       ],
     );
   }
@@ -338,6 +360,11 @@ class _PaymentViewState extends State<PaymentView> with TickerProviderStateMixin
         _cardContainerAnimationController.forward();
         break;
       case PaymentViewStep.PROCESSING:
+        await _cardContainerAnimationController.reverse();
+        _model.paymentViewStep = PaymentViewStep.PAYMENT_TYPE;
+        _cardContainerAnimationController.forward();
+        break;
+      case PaymentViewStep.ORDER_FAILED:
         await _cardContainerAnimationController.reverse();
         _model.paymentViewStep = PaymentViewStep.PAYMENT_TYPE;
         _cardContainerAnimationController.forward();

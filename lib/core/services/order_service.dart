@@ -1,25 +1,19 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:jollibee_kiosk/core/models/menu.dart';
-import 'package:jollibee_kiosk/core/models/option_category.dart';
+import 'package:jollibee_kiosk/core/dto/order_dto.dart';
 
 class OrderService {
-  
-  // Future<List<Menu>> getMenu(context) async {
-  //   List<Menu> menus = [];
 
-  //   QuerySnapshot snapshot = await Firestore.instance.collection('menu')
-  //     .orderBy('sortOrder', descending: false)
-  //     .getDocuments();
-
-  //   if (snapshot.documents.isNotEmpty) {
-  //     menus = snapshot.documents.map((DocumentSnapshot doc) => Menu.fromSnapshot(doc)).toList();
-  //   }
-
-  //   menuController.add(menus);
-  //   _menu = menus;
-  //   return menus;
-  // }
-
+  Future<bool> sendOrder(OrderDto orderDto) async {
+    print('[OrderService] sendOrder');
+    print(orderDto.toJson());
+    
+    try {
+      await Firestore.instance.collection('orders').add(orderDto.toJson());
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }

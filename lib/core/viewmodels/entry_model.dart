@@ -8,6 +8,15 @@ import 'package:jollibee_kiosk/core/services/menu_service.dart';
 
 class EntryModel extends BaseModel {
   final MenuService _menuService = locator<MenuService>();
+  final List<String> _assetImages = [
+    'at_counter.png',
+    'cashier.png',
+    'dine_in.png',
+    'jollibee_icon.png',
+    'jollibee_logo.png',
+    'receipt.png',
+    'take_out.png',
+  ];
 
   void getAllMenu(context) async {
     setState(ViewState.Busy);
@@ -30,16 +39,24 @@ class EntryModel extends BaseModel {
 
   Future<void> _precacheImages(context) async {
     return await Future.wait([
+      Future.wait(_assetImages.map((String fileName) async {
+        await precacheImage(AssetImage('assets/images/$fileName'), context);
+      })),
       Future.wait(_menuService.menu.map((Menu menu) async {
         await precacheImage(NetworkImage(menu.image), context);
-        // await Future.wait(menu?.items?.map((Item item) async => await precacheImage(NetworkImage(item?.image), context)));
-        menu?.items?.forEach((MenuItem item) async => await precacheImage(NetworkImage(item.image), context));
+        if (menu.items != null && menu.items.length > 0) {
+          await Future.wait(menu.items.map((MenuItem item) async => await precacheImage(NetworkImage(item.image), context)));
+        }
       })),
       Future.wait(_menuService.drinks.map((OptionCategory optionCategory) async {
-        optionCategory?.items?.forEach((OptionItem item) async => await precacheImage(NetworkImage(item?.image), context));
+        if (optionCategory.items != null && optionCategory.items.length > 0) {
+          await Future.wait(optionCategory.items.map((OptionItem item) async => await precacheImage(NetworkImage(item.image), context)));
+        }
       })),
       Future.wait(_menuService.addOns.map((OptionCategory optionCategory) async {
-        optionCategory?.items?.forEach((OptionItem item) async => await precacheImage(NetworkImage(item?.image), context));
+        if (optionCategory.items != null && optionCategory.items.length > 0) {
+          await Future.wait(optionCategory.items.map((OptionItem item) async => await precacheImage(NetworkImage(item.image), context)));
+        }
       }))
     ]);
   }
