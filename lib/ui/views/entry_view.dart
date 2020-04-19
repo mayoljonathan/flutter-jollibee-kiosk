@@ -73,37 +73,36 @@ class _EntryViewState extends State<EntryView> {
       widget = _buildFetchingState();
     }
 
-    double size = SizeConfig.blockSizeHorizontal * 30;
-
-    return SizedBox(
-      height: size,
-      width: size,
-      child: widget
-    );
+    return widget;
   }
 
   Widget _buildReadyState() {
-    return CustomBouncingContainer(
-      // onTap: () => _model.getAllMenu(context), //DEBUG PURPOSES
-      onTap: () => Navigator.pushNamed(context, '/home'),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: Colors.red,
-          shape: BoxShape.circle
-        ),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: Text('Touch to Start', 
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: kTitleTextSize
-              )
-            ),
+    double size = SizeConfig.blockSizeHorizontal * 30;
+    return SizedBox(
+      width: size,
+      height: size,
+      child: CustomBouncingContainer(
+        // onTap: () => _model.getAllMenu(context), //DEBUG PURPOSES
+        onTap: () => Navigator.pushNamed(context, '/home'),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.red,
+            shape: BoxShape.circle
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Text('Touch to Start', 
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: kTitleTextSize
+                )
+              ),
+            )
           )
         )
-      )
+      ),
     );
   }
 
@@ -163,6 +162,7 @@ class _EntryViewState extends State<EntryView> {
             kYellow,
           ],
         ),
+        SizedBox(height: 12.0),
         Text('Initializing', style: TextStyle(
           fontSize: kTitleTextSize
         ))

@@ -89,7 +89,7 @@ class OrderCompletedView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: EdgeInsets.all(SizeConfig.blockSizeHorizontal * 2),
                 child: Image.asset(imagePath),
               ),
               Text(label, 
@@ -104,7 +104,7 @@ class OrderCompletedView extends StatelessWidget {
             top: 0,
             left: 0,
             child: Container(
-              padding: const EdgeInsets.all(12.0),
+              padding: EdgeInsets.all(SizeConfig.blockSizeHorizontal * 1.5),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: kRed

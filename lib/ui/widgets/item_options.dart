@@ -115,10 +115,12 @@ class _ItemOptionsState extends State<ItemOptions> {
                       ),
                     ),
                     SizedBox(width: 12.0),
-                    Text(itemOptionToString(itemOption), style: TextStyle(
-                      fontSize: kActionButtonTextSize,
-                      fontWeight: FontWeight.w500
-                    )),
+                    Expanded(
+                      child: Text(itemOptionToString(itemOption), style: TextStyle(
+                        fontSize: kActionButtonTextSize,
+                        fontWeight: FontWeight.w500
+                      )),
+                    ),
                   ],
                 ),
               ),

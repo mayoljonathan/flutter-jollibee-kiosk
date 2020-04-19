@@ -122,11 +122,11 @@ class ReviewOrderView extends StatelessWidget {
                 Expanded(
                   child: _buildActionButtonItem(context, text: 'Go Back')
                 ),
-                SizedBox(width: 48),
+                SizedBox(width: SizeConfig.blockSizeHorizontal * 3),
                 Expanded(
                   child: OrderTotal()
                 ),
-                SizedBox(width: 48),
+                SizedBox(width: SizeConfig.blockSizeHorizontal * 3),
                 Expanded(
                   child: ListenableProvider(
                     builder: (BuildContext context) => locator<MyCartModel>(),
