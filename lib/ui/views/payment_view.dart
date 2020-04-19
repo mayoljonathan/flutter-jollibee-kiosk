@@ -262,9 +262,10 @@ class _PaymentViewState extends State<PaymentView> with TickerProviderStateMixin
           ],
         ),
         SizedBox(height: 24.0),
-        Text('Processing Order. Please wait.', style: TextStyle(
-          fontSize: kTitleTextSize
-        ))
+        Text('Processing Order. Please wait.', 
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: kTitleTextSize)
+        )
       ],
     );
   }

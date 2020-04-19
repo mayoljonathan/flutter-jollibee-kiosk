@@ -88,7 +88,7 @@ class MyCart extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         Expanded(child: OrderTotal()),
-        SizedBox(height: 18.0),
+        SizedBox(height: SizeConfig.blockSizeHorizontal * 3),
         ListenableProvider(
           builder: (BuildContext context) => locator<MyCartModel>(),
           child: Consumer<MyCartModel>(
@@ -100,7 +100,7 @@ class MyCart extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12.0),
                   color: Provider.of<MyCartModel>(context).items.length == 0 ? kGrey : kGreen,
                 ),
-                padding: const EdgeInsets.all(24.0),
+                padding: EdgeInsets.all(SizeConfig.blockSizeHorizontal * 3),
                 child: Text('Review Order', 
                   textAlign: TextAlign.center,
                   style: TextStyle(
