@@ -94,11 +94,12 @@ class _HomeViewState extends State<HomeView> {
               )
             ),
           ),
-          Text(_model?.selectedMenu?.name ?? '' , style: TextStyle(
-            fontSize: kTitleTextSize,
-            fontWeight: FontWeight.bold
-          )),
-          Spacer(),
+          Expanded(
+            child: Text(_model?.selectedMenu?.name ?? '' , style: TextStyle(
+              fontSize: kTitleTextSize,
+              fontWeight: FontWeight.bold
+            )),
+          ),
           Padding(
             padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 2),
             child: FittedBox(

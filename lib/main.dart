@@ -12,6 +12,8 @@ import 'package:jollibee_kiosk/ui/router.dart';
 import 'package:jollibee_kiosk/ui/shared/theme.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   setupLocator();
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
